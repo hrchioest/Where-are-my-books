@@ -58,10 +58,11 @@ router.post('/', async (req, res, next) => {
         res.send({"respuesta":respuesta.insertId});
     }
     catch(e){
-        res.status(413).send({Error:"Error inesperado"});
+        res.status(413).send({Error:"Error inesperado - "+e});
     }
 })
 
+// GET '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado se encuentre en la base de datos.
 router.get('/:id', async (req, res, next) => {
     try{
         const query="SELECT * FROM books WHERE id=?";
@@ -72,9 +73,56 @@ router.get('/:id', async (req, res, next) => {
         res.send({"respuesta":respuesta});
     }
     catch(e){
-        res.status(413).send({Error:"Error inesperado - No se encuentra ese libro"});
+        res.status(413).send({Error:"Error inesperado - "+e});
     }
 })
 
+// PUT '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado se encuentre en la base de datos y realiza la modificacion.
+router.put('/:id', async (req, res, next) => {
+    try{
+        let query="SELECT * FROM books WHERE id=?";
+        let respuesta=await qy(query,[req.params.id]);
+        if(respuesta.length==0){
+            throw new Error("No se encuentra ese libro") 
+        }
+
+        // Realizo la modificacion.
+        query="UPDATE books SET descripcion=? WHERE id=?"
+        respuesta=await qy(query,[req.body.descripcion,req.params.id])
+
+        // Devuelvo el dato modificado
+        query="SELECT * FROM books WHERE id=?";
+        respuesta=await qy(query,[req.params.id]);
+        res.send({"respuesta":respuesta});
+
+    }
+    catch(e){
+        res.status(413).send({Error:"Error inesperado - "+e});
+    }
+
+})
+
+// DELETE '/libro/:id'
+router.delete('/:id', async (req, res, next) => {
+    try{
+        let query="SELECT * FROM books WHERE id=?";
+        let respuesta=await qy(query,[req.params.id]);
+        if(respuesta.length==0){
+            throw new Error("No se encuentra ese libro") 
+        } 
+        console.log(respuesta[0].persona_id);
+        if(respuesta[0].persona_id>0){
+            throw new Error("El libro se encuentra prestado") 
+        }
+        
+        // Realizo el borrado
+        query="DELETE FROM books WHERE id=?"
+        respuesta=await qy(query,[req.params.id])
+        res.send({"respuesta":respuesta});
+    }
+    catch(e){
+        res.status(413).send({Error:"Error inesperado - "+e});
+    }
+});
 
 module.exports = router;
