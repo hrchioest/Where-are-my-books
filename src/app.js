@@ -2,8 +2,11 @@ const express = require("express");
 const mysql = require("mysql");
 const util = require("util");
 
+//Setting
 const app = express();
-const port = 3000;
+app.set("port", process.env.PORT || 3000);
+
+//Middleswares
 app.use(express.json());
 
 // Conexion con mysql
@@ -24,29 +27,12 @@ conexion.connect((error) => {
 
 const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de asyn-await en la conexion mysql
 
-// Desarrollo de la lógica:
+//Routes
+app.use(require("./routes/books"));
+app.use(require("./routes/users"));
+app.use(require("./routes/categories"));
 
-/**
- * libros
- *
- *
- *  Ruta -> /libro
- */
-
-/**
- * categoria de los libros
- *
- *
- *  Ruta -> /categoria
- */
-
-/**
- * Usuarios de los libros
- *
- * Ruta -> /usuario
- */
-
-// Servidor
+// Starting the server
 app.listen(port, () => {
   console.log("Servidor escuchando en el puerto ", port);
 });
