@@ -1,6 +1,10 @@
 const express = require("express");
 const mysql = require("mysql");
 const util = require("util");
+const booksRouter=require("./routes/books");
+const usersRouter=require("./routes/users");
+const categoriesRouter=require("./routes/categories");
+const port=3000
 
 //Setting
 const app = express();
@@ -13,7 +17,7 @@ app.use(express.json());
 const conexion = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "", // en mi caso SQL esta sin contraseña
   database: "mybooks"
 });
 
@@ -28,9 +32,11 @@ conexion.connect((error) => {
 const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de asyn-await en la conexion mysql
 
 //Routes
-app.use(require("./routes/books"));
-app.use(require("./routes/users"));
-app.use(require("./routes/categories"));
+
+
+app.use('/books', booksRouter);
+app.use('/users', usersRouter);
+app.use('/categories', categoriesRouter);
 
 // Starting the server
 app.listen(port, () => {
