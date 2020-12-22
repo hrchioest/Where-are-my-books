@@ -30,7 +30,6 @@ conexion.connect((error) => {
 });
 
 const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de asyn-await en la conexion mysql
-
 //Routes
 
 
@@ -42,3 +41,4 @@ app.use('/categories', categoriesRouter);
 app.listen(port, () => {
   console.log("Servidor escuchando en el puerto ", port);
 });
+
