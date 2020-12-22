@@ -1,6 +1,6 @@
-# UTN-BA - Trabajo práctico del Módulo 3 y 4 INTEGRADOR 🚀
+## UTN-BA - Trabajo práctico del Módulo 3 y 4 INTEGRADOR 🚀
 
-_Repositorio del Trabajo práctico del Módulo 3 y 4 INTEGRADOR: Where are my books? 🔍 📕📗📘 ._
+_Proyecto: Where are my books? 🔍 📕📗📘 ._
 
 ## ¿Que es? 📋
 
@@ -14,7 +14,7 @@ La base de datos puede ser ejecutada a través de Docker:
 $ docker-compose up
 ```
 
-## Integrantes ✒️
+### Integrantes ✒️
 
 - [**Rocío Esteban**](https://github.com/hrchioest)
 - [**Joaquin Zuazo**](https://github.com/joaquinzuazo)
