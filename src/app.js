@@ -1,6 +1,4 @@
 const express = require("express");
-const mysql = require("mysql");
-const util = require("util");
 const booksRouter=require("./routes/books");
 const usersRouter=require("./routes/users");
 const categoriesRouter=require("./routes/categories");
