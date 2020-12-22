@@ -16,5 +16,5 @@ $ docker-compose up
 
 ### Integrantes ✒️
 
-- [**Rocío Esteban**](https://github.com/hrchioest)
 - [**Joaquin Zuazo**](https://github.com/joaquinzuazo)
+- [**Rocío Esteban**](https://github.com/hrchioest)
