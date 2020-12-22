@@ -13,26 +13,7 @@ app.set("port", process.env.PORT || 3000);
 //Middleswares
 app.use(express.json());
 
-// Conexion con mysql
-const conexion = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "", // en mi caso SQL esta sin contraseña
-  database: "mybooks"
-});
-
-conexion.connect((error) => {
-  if (error) {
-    throw error;
-  }
-
-  console.log("Conexion con la base de datos mysql establecida");
-});
-
-const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de asyn-await en la conexion mysql
-//Routes
-
-
+// rutas
 app.use('/books', booksRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
