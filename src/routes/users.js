@@ -15,7 +15,6 @@ conexion.connect((error) => {
   if (error) {
     throw error;
   }
-
   console.log("Conexión con la base de datos mysql establecida");
 });
 const qy = util.promisify(conexion.query).bind(conexion);
@@ -49,8 +48,7 @@ router.post("/", async (req, res) => {
     }
 
     // Guardo nuevo usuario
-    query =
-      "INSERT INTO users (nombre, apellido, alias, email) VALUE (?, ?,?,?)";
+    query = "INSERT INTO users (nombre, apellido, alias, email) VALUE (?,?,?,?)";
     respuesta = await qy(query, [
       req.body.nombre,
       req.body.apellido,
@@ -97,6 +95,71 @@ router.get("/:id", async (req, res) => {
   } catch (e) {
     console.error(e.message);
     res.status(413).send({ Error: e.message });
+  }
+});
+
+/*
+
+** PUT '/persona/:id' recibe: {nombre: string, apellido: string, alias: string, email: string} el email no se puede modificar. retorna status 200 y el objeto modificado o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "no se encuentra esa persona"
+
+*/
+
+router.put('/:id', async (req, res) => {
+  try {
+    
+    if(!req.body.email) {
+      throw new Error("No ingresaste el nuevo email");
+    }
+
+    let query = 'SELECT * FROM users WHERE email = ? AND id <> ?';
+
+    let respuesta = await qy(query, [req.body.email, req.params.id]);
+
+    if(respuesta.length > 0) {
+      throw new Error("El mail ingresado ya existe");
+    }
+
+    query = 'UPDATE users SET email = ? WHERE id = ?';
+
+    respuesta = await qy(query, [req.body.email, req.params.id]);
+
+    res.send({"respuesta": respuesta});
+
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(413).send({"Error": e.message});
+  }
+});
+
+
+
+/*
+
+** DELETE '/persona/:id' retorna: 200 y {mensaje: "se borro correctamente"} o bien 413, {mensaje: <descripcion del error>} "error inesperado", "no existe esa persona", "esa persona tiene libros asociados, no se puede eliminar"
+
+*/
+
+router.delete('/:id', async (req, res) => {
+  try {
+    let query = 'SELECT * FROM users WHERE id = ?';
+
+    let respuesta = await qy(query, [req.params.id]);
+
+    // Chequeo si el id ingresado está asignado a alguna persona
+    if(respuesta.length == 0) {
+      throw new Error("Esta persona no existe");
+    }
+
+    query = 'DELETE FROM users WHERE id = ?';
+
+    respuesta = await qy(query, [req.params.id]);
+
+    res.send("La persona con el id ingresado se borro correctamente de la base de datos.");
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(413).send({"Error": e.message});
   }
 });
 
