@@ -1,22 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql");
+
 const util = require("util");
-
-// Conexion con mysql
-const conexion = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "mybooks"
-});
-
-conexion.connect((error) => {
-  if (error) {
-    throw error;
-  }
-  console.log("Conexión con la base de datos mysql establecida");
-});
+const conexion = require("../dbConnection");
 const qy = util.promisify(conexion.query).bind(conexion);
 
 /**
@@ -48,7 +34,8 @@ router.post("/", async (req, res) => {
     }
 
     // Guardo nuevo usuario
-    query = "INSERT INTO users (nombre, apellido, alias, email) VALUE (?,?,?,?)";
+    query =
+      "INSERT INTO users (nombre, apellido, alias, email) VALUE (?,?,?,?)";
     respuesta = await qy(query, [
       req.body.nombre,
       req.body.apellido,
@@ -104,35 +91,30 @@ router.get("/:id", async (req, res) => {
 
 */
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    
-    if(!req.body.email) {
+    if (!req.body.email) {
       throw new Error("No ingresaste el nuevo email");
     }
 
-    let query = 'SELECT * FROM users WHERE email = ? AND id <> ?';
+    let query = "SELECT * FROM users WHERE email = ? AND id <> ?";
 
     let respuesta = await qy(query, [req.body.email, req.params.id]);
 
-    if(respuesta.length > 0) {
+    if (respuesta.length > 0) {
       throw new Error("El mail ingresado ya existe");
     }
 
-    query = 'UPDATE users SET email = ? WHERE id = ?';
+    query = "UPDATE users SET email = ? WHERE id = ?";
 
     respuesta = await qy(query, [req.body.email, req.params.id]);
 
-    res.send({"respuesta": respuesta});
-
-
+    res.send({ respuesta: respuesta });
   } catch (e) {
     console.error(e.message);
-    res.status(413).send({"Error": e.message});
+    res.status(413).send({ Error: e.message });
   }
 });
-
-
 
 /*
 
@@ -140,26 +122,27 @@ router.put('/:id', async (req, res) => {
 
 */
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    let query = 'SELECT * FROM users WHERE id = ?';
+    let query = "SELECT * FROM users WHERE id = ?";
 
     let respuesta = await qy(query, [req.params.id]);
 
     // Chequeo si el id ingresado está asignado a alguna persona
-    if(respuesta.length == 0) {
+    if (respuesta.length == 0) {
       throw new Error("Esta persona no existe");
     }
 
-    query = 'DELETE FROM users WHERE id = ?';
+    query = "DELETE FROM users WHERE id = ?";
 
     respuesta = await qy(query, [req.params.id]);
 
-    res.send("La persona con el id ingresado se borro correctamente de la base de datos.");
-
+    res.send(
+      "La persona con el id ingresado se borro correctamente de la base de datos."
+    );
   } catch (e) {
     console.error(e.message);
-    res.status(413).send({"Error": e.message});
+    res.status(413).send({ Error: e.message });
   }
 });
 
