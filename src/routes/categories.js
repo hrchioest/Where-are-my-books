@@ -98,8 +98,23 @@ DELETE '/categoria/:id' retorna: status 200 y {mensaje: "se borro correctamente"
 
 */
 
-
-
+router.delete('/:id', async (req, res, next) => {
+  try{
+      let query="SELECT * FROM categories WHERE id=?";
+      let respuesta=await qy(query,[req.params.id]);
+      if(respuesta.length==0){
+          throw new Error("La categoria no existe.") 
+      } 
+      
+      // Realizo el borrado
+      query="DELETE FROM categories WHERE id=?"
+      respuesta=await qy(query,[req.params.id])
+      res.send("La categoria ingresada se ha borrado correctamente de la base de datos.");
+  }
+  catch(e){
+      res.status(413).send({Error:"Error inesperado - "+e});
+  }
+});
 
 
 module.exports = router;
