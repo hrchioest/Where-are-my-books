@@ -59,8 +59,8 @@ router.get("/", async (req, res) => {
     const query = "SELECT * FROM users";
     const respuesta = await qy(query);
     res.send({ respuesta: respuesta });
-    console.log("respuesta", respuesta);
   } catch (e) {
+    console.error(e.message);
     res.status(413).send({ Error: "Error inesperado" });
   }
 });
@@ -87,27 +87,33 @@ router.get("/:id", async (req, res) => {
 
 /*
 
-** PUT '/persona/:id' recibe: {nombre: string, apellido: string, alias: string, email: string} el email no se puede modificar. retorna status 200 y el objeto modificado o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "no se encuentra esa persona"
+** PUT '/persona/:id' recibe: {nombre: string, apellido: string, alias: string, email: string}
+ el email no se puede modificar. retorna status 200 y el objeto modificado o bien status 413, 
+ {mensaje: <descripcion del error>} "error inesperado", "no se encuentra esa persona"
 
 */
 
 router.put("/:id", async (req, res) => {
   try {
-    if (!req.body.email) {
-      throw new Error("No ingresaste el nuevo email");
+    let query = "SELECT * FROM users WHERE  id = ?";
+
+    //verificando si el usuario solicitado existe:
+    let respuesta = await qy(query, [req.params.id]);
+    if (respuesta.length === 0) {
+      throw new Error("El usuario no existe");
     }
 
-    let query = "SELECT * FROM users WHERE email = ? AND id <> ?";
+    query = "UPDATE users SET nombre = ?, apellido = ?, alias =? WHERE id = ?";
+    respuesta = await qy(query, [
+      req.body.nombre,
+      req.body.apelido,
+      req.body.alias,
+      req.params.id
+    ]);
 
-    let respuesta = await qy(query, [req.body.email, req.params.id]);
-
-    if (respuesta.length > 0) {
-      throw new Error("El mail ingresado ya existe");
+    if ("email" in req.body) {
+      throw new Error("El mail no se puede modificar");
     }
-
-    query = "UPDATE users SET email = ? WHERE id = ?";
-
-    respuesta = await qy(query, [req.body.email, req.params.id]);
 
     res.send({ respuesta: respuesta });
   } catch (e) {
@@ -118,7 +124,9 @@ router.put("/:id", async (req, res) => {
 
 /*
 
-** DELETE '/persona/:id' retorna: 200 y {mensaje: "se borro correctamente"} o bien 413, {mensaje: <descripcion del error>} "error inesperado", "no existe esa persona", "esa persona tiene libros asociados, no se puede eliminar"
+** DELETE '/persona/:id' retorna: 200 y {mensaje: "se borro correctamente"} o bien 413, 
+{mensaje: <descripcion del error>} "error inesperado", "no existe esa persona", "esa 
+persona tiene libros asociados, no se puede eliminar"
 
 */
 
@@ -128,18 +136,16 @@ router.delete("/:id", async (req, res) => {
 
     let respuesta = await qy(query, [req.params.id]);
 
-    // Chequeo si el id ingresado está asignado a alguna persona
-    if (respuesta.length == 0) {
-      throw new Error("Esta persona no existe");
+    // Verificando si el id ingresado pertenece a algún usuario:
+    if (respuesta.length === 0) {
+      throw new Error("Este usuario no existe");
     }
 
     query = "DELETE FROM users WHERE id = ?";
 
     respuesta = await qy(query, [req.params.id]);
 
-    res.send(
-      "La persona con el id ingresado se borro correctamente de la base de datos."
-    );
+    res.send("El usuario con el id ingresado se borro correctamente.");
   } catch (e) {
     console.error(e.message);
     res.status(413).send({ Error: e.message });
