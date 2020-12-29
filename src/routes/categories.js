@@ -1,25 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql");
+
 const util = require("util");
-
-// Conexion con mysql
-const conexion = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "mybooks"
-  });
+const conexion = require("../dbConnection");
+const qy = util.promisify(conexion.query).bind(conexion);
   
-  conexion.connect((error) => {
-    if (error) {
-      throw error;
-    }
-    console.log("Conexión con la base de datos mysql establecida");
-  });
-  const qy = util.promisify(conexion.query).bind(conexion);
-  
-
 /*
 
 POST '/categoria' recibe: {nombre: string} retorna: status: 200, {id: numerico, nombre: string} - status: 413, {mensaje: <descripcion del error>} que puede ser: "faltan datos", "ese nombre de categoria ya existe", "error inesperado"
