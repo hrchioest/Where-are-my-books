@@ -17,4 +17,6 @@ $ docker-compose up
 ### Integrantes ✒️
 
 - [**Joaquin Zuazo**](https://github.com/joaquinzuazo)
+- [**Santiago Delmonte**](https://github.com/santiagoDelmonte02)
+- [**Juan Almada**](https://github.com/juanalmada8)
 - [**Rocío Esteban**](https://github.com/hrchioest)
