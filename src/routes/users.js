@@ -95,7 +95,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    let query = "SELECT * FROM users WHERE  id = ?";
+    let query = "SELECT * FROM users WHERE id = ?";
 
     //verificando si el usuario solicitado existe:
     let respuesta = await qy(query, [req.params.id]);
@@ -103,10 +103,10 @@ router.put("/:id", async (req, res) => {
       throw new Error("El usuario no existe");
     }
 
-    query = "UPDATE users SET nombre = ?, apellido = ?, alias =? WHERE id = ?";
+    query = "UPDATE users SET nombre = ?, apellido = ?, alias = ? WHERE id = ?";
     respuesta = await qy(query, [
       req.body.nombre,
-      req.body.apelido,
+      req.body.apellido,
       req.body.alias,
       req.params.id
     ]);
@@ -115,6 +115,10 @@ router.put("/:id", async (req, res) => {
       throw new Error("El mail no se puede modificar");
     }
 
+    // Para retornar el objeto modificado con sus respectivos datos
+    query = "SELECT * FROM users WHERE id = ?";
+    respuesta = await qy(query, [req.params.id]);
+    
     res.send({ respuesta: respuesta });
   } catch (e) {
     console.error(e.message);
