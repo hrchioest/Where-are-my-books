@@ -4,7 +4,9 @@ const conexion = require("../dbConnection");
 const util = require("util");
 const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de asyn-await en la conexion mysql
 
-// GET '/libro' - Devuelve todos los libros o mensaje de error con status 413.
+/*
+GET '/libro' - Devuelve todos los libros o mensaje de error con status 413.
+*/
 router.get("/", async (req, res) => {
   try {
     const query = "SELECT * FROM libro";
@@ -15,12 +17,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * POST '/libro' recibe: {nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}
- * devuelve 200 y {id: numero, nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}
- *  o bien status 413,  {mensaje: <descripcion del error>} que puede ser "error inesperado", "ese libro ya existe",
- *  "nombre y categoria son datos obligatorios", "no existe la categoria indicada", "no existe la persona indicada"
- */
+/*
+POST '/libro' recibe: {nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}
+devuelve 200 y {id: numero, nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}
+o bien status 413,  {mensaje: <descripcion del error>} que puede ser "error inesperado", "ese libro ya existe",
+"nombre y categoria son datos obligatorios", "no existe la categoria indicada", "no existe la persona indicada"
+*/
+
 router.post("/", async (req, res) => {
   try {
     // Verifico que se pasen todos los datos requeridos.
@@ -31,8 +34,8 @@ router.post("/", async (req, res) => {
     // Verifico que el nombre del libro no esté registrado
     let query = "SELECT id FROM libro WHERE nombre = ?";
     let nombre_libro = await qy(query, [req.body.nombre]);
-    if(nombre_libro.length > 0) {
-        throw new Error("Ese libro ya existe");
+    if (nombre_libro.length > 0) {
+      throw new Error("Ese libro ya existe");
     }
 
     // consulto si el id existe en categorias de libros
@@ -43,9 +46,9 @@ router.post("/", async (req, res) => {
       throw new Error("No existe la categoría indicada");
     }
 
-    // Verifico si persona_id es numerico y validad si corresponde a un usuario registrado sino sería null
-    //y al ser null sería un libro que no lo tiene ningun usuario
-    
+    // Verifico si persona_id es numerico y valido si corresponde a un usuario registrado sino sería null
+    //y al ser null sería un libro que no lo tiene ninguna persona.
+
     let persona_id = req.body.persona_id;
     if (Number.isInteger(persona_id)) {
       const query_user = "SELECT id FROM persona WHERE id=?";
@@ -56,7 +59,12 @@ router.post("/", async (req, res) => {
     } else {
       persona_id = null;
     }
-    
+
+    //se valida en caso no se pasa descripción ya que no es obligatorio
+    let descripcion = req.body.descripcion;
+    if (descripcion === undefined) {
+      descripcion = "";
+    }
 
     // Si todo lo anterior esta correcto se procede al guardado en la DB y persona_id se guardará siendo validada
     //anteriormente.
@@ -64,7 +72,7 @@ router.post("/", async (req, res) => {
       "INSERT INTO libro (nombre, descripcion, categoria_id, persona_id) VALUES (?, ?, ?, ?)";
     let respuesta_insert = await qy(query, [
       req.body.nombre,
-      req.body.descripcion,
+      descripcion,
       req.body.categoria_id,
       persona_id
     ]);
@@ -78,7 +86,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado se encuentre en la base de datos.
+/*
+GET '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado se
+encuentre en la base de datos.
+*/
 router.get("/:id", async (req, res) => {
   try {
     const query = "SELECT * FROM libro WHERE id=?";
@@ -92,15 +103,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// PUT '/libro/prestar/:id' y {id:numero, persona_id:numero} devuelve 200 y {mensaje: "se presto correctamente"} o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "el libro ya se encuentra prestado, no se puede prestar hasta que no se devuelva", "no se encontro el libro", "no se encontro la persona a la que se quiere prestar el libro"
-
+/*
+PUT '/libro/prestar/:id' y {id:numero, persona_id:numero} devuelve 200 y {mensaje: "se presto correctamente"}
+o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "el libro ya se encuentra prestado,
+no se puede prestar hasta que no se devuelva", "no se encontro el libro", "no se encontro la persona a la que 
+se quiere prestar el libro"
+*/
 router.put("/prestar/:id", async (req, res) => {
   try {
     let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
-    console.log(respuesta);
 
-    // consulto si el id existe en los usuarios
+    // consulto si el id corresponde a alguna
     let query_user = "SELECT id FROM persona WHERE id=?";
     let respuesta_user = await qy(query_user, [req.body.persona_id]);
 
@@ -108,7 +122,7 @@ router.put("/prestar/:id", async (req, res) => {
       throw new Error("No se encuentra ese libro.");
     }
 
-    if (respuesta[0].persona_id != 0) {
+    if (respuesta[0].persona_id != null) {
       throw new Error(
         "El libro se encuentra prestado, no se puede prestar hasta que se devuelva."
       );
@@ -124,17 +138,17 @@ router.put("/prestar/:id", async (req, res) => {
     query = "UPDATE libro SET persona_id=? WHERE id=? ";
     respuesta = await qy(query, [req.body.persona_id, req.params.id]);
 
-    // Devuelvo el dato modificado
-    query = "SELECT * FROM libro WHERE id=?";
-    respuesta = await qy(query, [req.params.id]);
-
     res.send({ respuesta: "Se presto correctamente" });
   } catch (e) {
     res.status(413).send({ Error: "Error inesperado - " + e });
   }
 });
 
-// PUT '/libro/devolver/:id' y {} devuelve 200 y {mensaje: "se realizo la devolucion correctamente"} o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "ese libro no estaba prestado!", "ese libro no existe"
+/*
+PUT '/libro/devolver/:id' y {} devuelve 200 y {mensaje: "se realizo la devolucion correctamente"} 
+o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "ese libro no estaba 
+prestado!", "ese libro no existe"
+*/
 router.put("/devolver/:id", async (req, res) => {
   try {
     // consulto si el libro a devolver existe.
@@ -163,8 +177,10 @@ router.put("/devolver/:id", async (req, res) => {
   }
 });
 
-// PUT '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado se encuentre
-// en la base de datos y realiza la modificacion.
+/* 
+PUT '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado 
+se encuentre en la base de datos y realiza la modificacion.
+*/
 router.put("/:id", async (req, res) => {
   try {
     let query = "SELECT * FROM libro WHERE id=?";
