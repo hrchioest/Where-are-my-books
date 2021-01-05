@@ -6,11 +6,11 @@ const conexion = require("../dbConnection");
 const qy = util.promisify(conexion.query).bind(conexion);
 
 /**
-*POST '/users' recibe: {nombre: string, apellido: string, alias: string, email: string} 
+*POST '/persona' recibe: {nombre: string, apellido: string, alias: string, email: string} 
 retorna: status: 200, {id: numerico, nombre: string, apellido: string, alias: string, email: string}
  - status: 413, {mensaje: <descripcion del error>} que puede ser: "faltan datos", "el email ya se
   encuentra registrado", "error inesperado"
- */
+*/
 
 router.post("/", async (req, res) => {
   try {
@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
     }
 
     // Verifico que no exista previamente un usuario con el mismo email
-    let query = "SELECT id FROM users WHERE email = ?";
+    let query = "SELECT id FROM persona WHERE email = ?";
 
     let respuesta = await qy(query, [req.body.email]);
 
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 
     // Guardo nuevo usuario
     query =
-      "INSERT INTO users (nombre, apellido, alias, email) VALUE (?,?,?,?)";
+      "INSERT INTO persona (nombre, apellido, alias, email) VALUE (?,?,?,?)";
     respuesta = await qy(query, [
       req.body.nombre,
       req.body.apellido,
@@ -50,13 +50,13 @@ router.post("/", async (req, res) => {
 });
 
 /**
- *GET '/users' retorna status 200 y [{id: numerico, nombre: string, apellido: string, 
+ *GET '/persona' retorna status 200 y [{id: numerico, nombre: string, apellido: string, 
     alias: string, email; string}] o bien status 413 y []*
  */
 
 router.get("/", async (req, res) => {
   try {
-    const query = "SELECT * FROM users";
+    const query = "SELECT * FROM persona";
     const respuesta = await qy(query);
     res.send({ respuesta: respuesta });
   } catch (e) {
@@ -66,14 +66,14 @@ router.get("/", async (req, res) => {
 });
 
 /**
- * GET '/users/:id' retorna status 200 y {id: numerico, nombre: string, apellido: string,
+ * GET '/persona/:id' retorna status 200 y {id: numerico, nombre: string, apellido: string,
  *  alias: string, email; string} - status 413 , {mensaje: <descripcion del error>}
  * "error inesperado", "no se encuentra esa persona"
  */
 
 router.get("/:id", async (req, res) => {
   try {
-    const query = "SELECT * FROM users WHERE id = ?";
+    const query = "SELECT * FROM persona WHERE id = ?";
 
     const respuesta = await qy(query, [req.params.id]);
     console.log(respuesta);
@@ -95,7 +95,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    let query = "SELECT * FROM users WHERE id = ?";
+    let query = "SELECT * FROM persona WHERE id = ?";
 
     //verificando si el usuario solicitado existe:
     let respuesta = await qy(query, [req.params.id]);
@@ -103,7 +103,7 @@ router.put("/:id", async (req, res) => {
       throw new Error("El usuario no existe");
     }
 
-    query = "UPDATE users SET nombre = ?, apellido = ?, alias = ? WHERE id = ?";
+    query = "UPDATE persona SET nombre = ?, apellido = ?, alias = ? WHERE id = ?";
     respuesta = await qy(query, [
       req.body.nombre,
       req.body.apellido,
@@ -116,7 +116,7 @@ router.put("/:id", async (req, res) => {
     }
 
     // Para retornar el objeto modificado con sus respectivos datos
-    query = "SELECT * FROM users WHERE id = ?";
+    query = "SELECT * FROM persona WHERE id = ?";
     respuesta = await qy(query, [req.params.id]);
     
     res.send({ respuesta: respuesta });
@@ -136,7 +136,7 @@ persona tiene libros asociados, no se puede eliminar"
 
 router.delete("/:id", async (req, res) => {
   try {
-    let query = "SELECT * FROM users WHERE id = ?";
+    let query = "SELECT * FROM persona WHERE id = ?";
 
     let respuesta = await qy(query, [req.params.id]);
 
@@ -145,7 +145,7 @@ router.delete("/:id", async (req, res) => {
       throw new Error("Este usuario no existe");
     }
 
-    query = "DELETE FROM users WHERE id = ?";
+    query = "DELETE FROM persona WHERE id = ?";
 
     respuesta = await qy(query, [req.params.id]);
 

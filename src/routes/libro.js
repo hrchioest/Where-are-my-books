@@ -7,7 +7,7 @@ const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de a
 // GET '/libro' - Devuelve todos los libros o mensaje de error con status 413.
 router.get("/", async (req, res) => {
   try {
-    const query = "SELECT * FROM books";
+    const query = "SELECT * FROM libro";
     const respuesta = await qy(query);
     res.send({ respuesta: respuesta });
   } catch (e) {
@@ -28,8 +28,15 @@ router.post("/", async (req, res) => {
       throw new Error("Los campos nombre y categoria_id son obligatorios");
     }
 
+    // Verifico que el nombre del libro no esté registrado
+    let query = "SELECT id FROM libro WHERE nombre = ?";
+    let nombre_libro = await qy(query, [req.body.nombre]);
+    if(nombre_libro.length > 0) {
+        throw new Error("Ese libro ya existe");
+    }
+
     // consulto si el id existe en categorias de libros
-    const query_cat = "SELECT id FROM categories WHERE id=?";
+    const query_cat = "SELECT id FROM categoria WHERE id=?";
     const respuesta_cat = await qy(query_cat, [req.body.categoria_id]);
 
     if (respuesta_cat.length === 0) {
@@ -38,9 +45,10 @@ router.post("/", async (req, res) => {
 
     // Verifico si persona_id es numerico y validad si corresponde a un usuario registrado sino sería null
     //y al ser null sería un libro que no lo tiene ningun usuario
+    
     let persona_id = req.body.persona_id;
     if (Number.isInteger(persona_id)) {
-      const query_user = "SELECT id FROM users WHERE id=?";
+      const query_user = "SELECT id FROM persona WHERE id=?";
       const respuesta_user = await qy(query_user, [persona_id]);
 
       if (respuesta_user.length === 0)
@@ -48,11 +56,12 @@ router.post("/", async (req, res) => {
     } else {
       persona_id = null;
     }
+    
 
     // Si todo lo anterior esta correcto se procede al guardado en la DB y persona_id se guardará siendo validada
     //anteriormente.
     query =
-      "INSERT INTO books (nombre, descripcion, categoria_id, persona_id) VALUES (?, ?, ?, ?)";
+      "INSERT INTO libro (nombre, descripcion, categoria_id, persona_id) VALUES (?, ?, ?, ?)";
     let respuesta_insert = await qy(query, [
       req.body.nombre,
       req.body.descripcion,
@@ -61,7 +70,7 @@ router.post("/", async (req, res) => {
     ]);
 
     //Devolviendo los datos ingresados del nuevo book
-    query = "SELECT * FROM books WHERE id=?";
+    query = "SELECT * FROM libro WHERE id=?";
     respuesta = await qy(query, [respuesta_insert.insertId]);
     res.send({ respuesta: respuesta });
   } catch (e) {
@@ -72,7 +81,7 @@ router.post("/", async (req, res) => {
 // GET '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado se encuentre en la base de datos.
 router.get("/:id", async (req, res) => {
   try {
-    const query = "SELECT * FROM books WHERE id=?";
+    const query = "SELECT * FROM libro WHERE id=?";
     const respuesta = await qy(query, [req.params.id]);
     if (respuesta.length === 0) {
       throw new Error("No se encuentra ese libro");
@@ -87,12 +96,12 @@ router.get("/:id", async (req, res) => {
 
 router.put("/prestar/:id", async (req, res) => {
   try {
-    let query = "SELECT * FROM books WHERE id=?";
+    let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
     console.log(respuesta);
 
     // consulto si el id existe en los usuarios
-    let query_user = "SELECT id FROM users WHERE id=?";
+    let query_user = "SELECT id FROM persona WHERE id=?";
     let respuesta_user = await qy(query_user, [req.body.persona_id]);
 
     if (respuesta.length === 0) {
@@ -112,11 +121,11 @@ router.put("/prestar/:id", async (req, res) => {
     }
 
     // Realizo la modificacion.
-    query = "UPDATE books SET persona_id=? WHERE id=? ";
+    query = "UPDATE libro SET persona_id=? WHERE id=? ";
     respuesta = await qy(query, [req.body.persona_id, req.params.id]);
 
     // Devuelvo el dato modificado
-    query = "SELECT * FROM books WHERE id=?";
+    query = "SELECT * FROM libro WHERE id=?";
     respuesta = await qy(query, [req.params.id]);
 
     res.send({ respuesta: "Se presto correctamente" });
@@ -129,7 +138,7 @@ router.put("/prestar/:id", async (req, res) => {
 router.put("/devolver/:id", async (req, res) => {
   try {
     // consulto si el libro a devolver existe.
-    let query = "SELECT * FROM books WHERE id=?";
+    let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
 
     if (respuesta.length == 0) {
@@ -141,11 +150,11 @@ router.put("/devolver/:id", async (req, res) => {
     }
 
     // Realizo la modificacion.
-    query = "UPDATE books SET persona_id=? WHERE id=? ";
+    query = "UPDATE libro SET persona_id=? WHERE id=? ";
     respuesta = await qy(query, [0, req.params.id]);
 
     // Devuelvo el dato modificado
-    query = "SELECT * FROM books WHERE id=?";
+    query = "SELECT * FROM libro WHERE id=?";
     respuesta = await qy(query, [req.params.id]);
 
     res.send({ respuesta: "Se realizo la devolucion correctamente" });
@@ -158,18 +167,18 @@ router.put("/devolver/:id", async (req, res) => {
 // en la base de datos y realiza la modificacion.
 router.put("/:id", async (req, res) => {
   try {
-    let query = "SELECT * FROM books WHERE id=?";
+    let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
     if (respuesta.length === 0) {
       throw new Error("No se encuentra ese libro");
     }
 
     // Realizo la modificacion.
-    query = "UPDATE books SET descripcion = ? WHERE id = ?";
+    query = "UPDATE libro SET descripcion = ? WHERE id = ?";
     respuesta = await qy(query, [req.body.descripcion, req.params.id]);
 
     // Devuelvo el dato modificado
-    query = "SELECT * FROM books WHERE id=?";
+    query = "SELECT * FROM libro WHERE id=?";
     respuesta = await qy(query, [req.params.id]);
     res.send({ respuesta: respuesta });
   } catch (e) {
@@ -180,7 +189,7 @@ router.put("/:id", async (req, res) => {
 // DELETE '/libro/:id'
 router.delete("/:id", async (req, res) => {
   try {
-    let query = "SELECT * FROM books WHERE id=?";
+    let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
     if (respuesta.length == 0) {
       throw new Error("No se encuentra ese libro");
@@ -191,7 +200,7 @@ router.delete("/:id", async (req, res) => {
     }
 
     // Realizo el borrado
-    query = "DELETE FROM books WHERE id=?";
+    query = "DELETE FROM libro WHERE id=?";
     respuesta = await qy(query, [req.params.id]);
     res.send({ respuesta: "Se borro correctamente" });
   } catch (e) {
