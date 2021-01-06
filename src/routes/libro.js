@@ -159,19 +159,14 @@ router.put("/devolver/:id", async (req, res) => {
       throw new Error("No se encuentra ese libro.");
     }
 
-    if (respuesta[0].persona_id == 0) {
+    if (respuesta[0].persona_id === null) {
       throw new Error("El libro no se encuentra prestado.");
     }
 
-    // Realizo la modificacion.
     query = "UPDATE libro SET persona_id=? WHERE id=? ";
-    respuesta = await qy(query, [0, req.params.id]);
+    respuesta = await qy(query, [null, req.params.id]);
 
-    // Devuelvo el dato modificado
-    query = "SELECT * FROM libro WHERE id=?";
-    respuesta = await qy(query, [req.params.id]);
-
-    res.send({ respuesta: "Se realizo la devolucion correctamente" });
+    res.send({ respuesta: "Se realizó la devolución correctamente" });
   } catch (e) {
     res.status(413).send({ Error: "Error inesperado - " + e });
   }
