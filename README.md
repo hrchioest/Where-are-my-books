@@ -14,7 +14,7 @@ La base de datos puede ser ejecutada a través de Docker:
 $ docker-compose up
 ```
 
-### Integrantes ✒️
+### Integrantes (Grupo C) ✒️
 
 - [**Joaquin Zuazo**](https://github.com/joaquinzuazo)
 - [**Santiago Delmonte**](https://github.com/santiagoDelmonte02)
