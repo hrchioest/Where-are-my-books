@@ -103,6 +103,42 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/* 
+PUT '/libro/:id' y {id: numero, nombre:string, descripcion:string, categoria_id:numero,
+persona_id:numero/null} devuelve status 200 y {id: numero, nombre:string, descripcion:string,
+categoria_id:numero, persona_id:numero/null} modificado o bien status 413, {mensaje: 
+<descripcion del error>} "error inesperado","solo se puede modificar la descripcion del libro"
+*/
+router.put("/:id", async (req, res) => {
+  try {
+    let query = "SELECT * FROM libro WHERE id=?";
+    let respuesta = await qy(query, [req.params.id]);
+    if (respuesta.length === 0) {
+      throw new Error("No se encuentra ese libro");
+    }
+
+    // Realizo la modificacion.
+    query = "UPDATE libro SET descripcion = ? WHERE id = ?";
+    respuesta = await qy(query, [req.body.descripcion, req.params.id]);
+
+    if (
+      "nombre" in req.body ||
+      "categoria_id" in req.body ||
+      "persona_id" in req.body
+    ) {
+      throw new Error("Sólo se puede modificar la descripción del libro");
+    }
+
+    // Devuelvo el dato modificado
+    query = "SELECT * FROM libro WHERE id=?";
+    respuesta = await qy(query, [req.params.id]);
+
+    res.send({ respuesta: respuesta });
+  } catch (e) {
+    res.status(413).send({ Error: "Error inesperado - " + e });
+  }
+});
+
 /*
 PUT '/libro/prestar/:id' y {id:numero, persona_id:numero} devuelve 200 y {mensaje: "se presto correctamente"}
 o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "el libro ya se encuentra prestado,
@@ -128,7 +164,7 @@ router.put("/prestar/:id", async (req, res) => {
       );
     }
 
-    if (respuesta_user.length == 0) {
+    if (respuesta_user.length === 0) {
       throw new Error(
         "No se encuentra la persona a la que se quiere prestar el libro."
       );
@@ -155,7 +191,7 @@ router.put("/devolver/:id", async (req, res) => {
     let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
 
-    if (respuesta.length == 0) {
+    if (respuesta.length === 0) {
       throw new Error("No se encuentra ese libro.");
     }
 
@@ -167,31 +203,6 @@ router.put("/devolver/:id", async (req, res) => {
     respuesta = await qy(query, [null, req.params.id]);
 
     res.send({ respuesta: "Se realizó la devolución correctamente" });
-  } catch (e) {
-    res.status(413).send({ Error: "Error inesperado - " + e });
-  }
-});
-
-/* 
-PUT '/libro/:id' - Requiere el dato especifico del libro por id, verifica que el id ingresado 
-se encuentre en la base de datos y realiza la modificacion.
-*/
-router.put("/:id", async (req, res) => {
-  try {
-    let query = "SELECT * FROM libro WHERE id=?";
-    let respuesta = await qy(query, [req.params.id]);
-    if (respuesta.length === 0) {
-      throw new Error("No se encuentra ese libro");
-    }
-
-    // Realizo la modificacion.
-    query = "UPDATE libro SET descripcion = ? WHERE id = ?";
-    respuesta = await qy(query, [req.body.descripcion, req.params.id]);
-
-    // Devuelvo el dato modificado
-    query = "SELECT * FROM libro WHERE id=?";
-    respuesta = await qy(query, [req.params.id]);
-    res.send({ respuesta: respuesta });
   } catch (e) {
     res.status(413).send({ Error: "Error inesperado - " + e });
   }
