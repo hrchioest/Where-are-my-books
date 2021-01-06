@@ -208,23 +208,27 @@ router.put("/devolver/:id", async (req, res) => {
   }
 });
 
-// DELETE '/libro/:id'
+/*
+DELETE '/libro/:id' devuelve 200 y {mensaje: "se borro correctamente"}  o bien status 413,
+{mensaje: <descripcion del error>} "error inesperado", "no se encuentra ese libro", "ese 
+libro esta prestado no se puede borrar"
+*/
 router.delete("/:id", async (req, res) => {
   try {
     let query = "SELECT * FROM libro WHERE id=?";
     let respuesta = await qy(query, [req.params.id]);
-    if (respuesta.length == 0) {
+    if (respuesta.length === 0) {
       throw new Error("No se encuentra ese libro");
     }
-    console.log(respuesta[0].persona_id);
+
     if (respuesta[0].persona_id > 0) {
-      throw new Error("El libro se encuentra prestado");
+      throw new Error("El libro se encuentra prestado, no se puede borrar");
     }
 
     // Realizo el borrado
     query = "DELETE FROM libro WHERE id=?";
     respuesta = await qy(query, [req.params.id]);
-    res.send({ respuesta: "Se borro correctamente" });
+    res.send({ respuesta: "Se borró correctamente" });
   } catch (e) {
     res.status(413).send({ Error: "Error inesperado - " + e });
   }
