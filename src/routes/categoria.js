@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-
 const util = require("util");
 const conexion = require("../dbConnection");
 const qy = util.promisify(conexion.query).bind(conexion);
+const cors = require('cors');
+app.use(cors());
 
 /*
 POST '/categoria' recibe: {nombre: string} retorna: status: 200, {id: numerico, nombre: string} 

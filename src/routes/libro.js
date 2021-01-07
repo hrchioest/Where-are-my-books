@@ -3,6 +3,8 @@ const router = express.Router();
 const conexion = require("../dbConnection");
 const util = require("util");
 const qy = util.promisify(conexion.query).bind(conexion); // permite el uso de asyn-await en la conexion mysql
+const cors = require('cors');
+app.use(cors());
 
 /*
 GET '/libro' - Devuelve todos los libros o mensaje de error con status 413.
