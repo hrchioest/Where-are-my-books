@@ -1,55 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const util = require("util");
-const conexion = require("../dbConnection");
-const qy = util.promisify(conexion.query).bind(conexion);
-const cors = require('cors');
-app.use(cors());
+
+const query = require("./categoria.query");
 
 /*
 POST '/categoria' recibe: {nombre: string} retorna: status: 200, {id: numerico, nombre: string} 
 - status: 413, {mensaje: <descripcion del error>} que puede ser: "faltan datos", "ese nombre de
  categoria ya existe", "error inesperado"
 */
-
 router.post("/", async (req, res) => {
+  const nombre = req.body.nombre;
+
   try {
     // Valido que me manden correctamente la info
-    if (!req.body.nombre) {
+    if (!nombre) {
       throw new Error("Falta enviar el nombre de la categoria!");
     }
 
     // Verifico que no exista previamente una categoria con el mismo nombre
-    let query = "SELECT id FROM categoria WHERE nombre = ?";
-
-    let respuesta = await qy(query, [req.body.nombre]);
-
-    if (respuesta.length > 0) {
+    if (await query.existeNombre(nombre)) {
       throw new Error("Esta categoria ya existe");
     }
 
     // Guardo nueva categoria
-    query = "INSERT INTO `categoria` (`nombre`) VALUES (?)";
-    respuesta = await qy(query, [req.body.nombre]);
-    res.send({ respuesta: respuesta.insertId });
+    const respuesta = await query.crearCategoria(nombre);
+    res.send({ id: respuesta.insertId, nombre: nombre });
   } catch (e) {
     console.error(e.message);
-    res.status(413).send({ Error: e.message });
+    res.status(413).send({ error: e.message });
   }
 });
 
 /*
 GET '/categoria' retorna: status 200  y [{id:numerico, nombre:string}]  - status: 413 y []
 */
-
 router.get("/", async (req, res) => {
   try {
-    const query = "SELECT * FROM categoria";
-    const respuesta = await qy(query);
-    res.send({ respuesta: respuesta });
-    console.log("respuesta", respuesta);
+    const respuesta = await query.traerCategorias();
+    res.send(respuesta);
   } catch (e) {
-    res.status(413).send({ Error: "Error inesperado" });
+    res.status(413).send({ error: "Error inesperado" });
   }
 });
 
@@ -59,15 +49,17 @@ GET '/categoria/:id' retorna: status 200 y {id: numerico, nombre:string} - statu
 */
 
 router.get("/:id", async (req, res) => {
+  const id = req.params.id;
   try {
-    const query = "SELECT * FROM categoria WHERE id = ?";
-    const respuesta = await qy(query, [req.params.id]);
-    if (respuesta.length == 0) {
+    const respuesta = await query.traerCategoriaPorId(id);
+
+    if (!respuesta) {
       throw new Error("Error inesperado, la categoria no existe!");
     }
-    res.send({ respuesta: respuesta });
+
+    res.send(respuesta);
   } catch (e) {
-    console.error(e.message);
+    console.error(e);
     res.status(413).send({ Error: e.message });
   }
 });
@@ -77,23 +69,31 @@ DELETE '/categoria/:id' retorna: status 200 y {mensaje: "se borro correctamente"
 status: 413, {mensaje: <descripcion del error>} que puese ser: "error inesperado", 
 "categoria con libros asociados, no se puede eliminar", "no existe la categoria indicada"
 */
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
 
-router.delete("/:id", async (req, res, next) => {
   try {
-    let query = "SELECT *egoria WHERE id=?";
-    let respuesta = await qy(query, [req.params.id]);
-    if (respuesta.length == 0) {
+    const respuesta = await query.traerCategoriaPorId(id);
+
+    if (!respuesta) {
       throw new Error("La categoria no existe.");
     }
 
+    const existeLibros = await query.existeLibrosConCategoria(id);
+    if (existeLibros) {
+      throw new Error(
+        "La categoria contiene libros asociados, no se puede eliminar."
+      );
+    }
+
     // Realizo el borrado
-    query = "DELETE FROM categoria WHERE id=?";
-    respuesta = await qy(query, [req.params.id]);
-    res.send(
-      "La categoria ingresada se ha borrado correctamente de la base de datos."
-    );
+    await query.eliminarCategoria(id);
+
+    res.send({
+      mensaje: "La categoria ingresada se ha borrado correctamente."
+    });
   } catch (e) {
-    res.status(413).send({ Error: "Error inesperado - " + e });
+    res.status(413).send({ error: e.message });
   }
 });
 
