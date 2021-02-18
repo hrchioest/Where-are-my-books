@@ -1,7 +1,9 @@
 const express = require("express");
-const booksRouter = require("./routes/books");
-const usersRouter = require("./routes/users");
-const categoriesRouter = require("./routes/categories");
+const cors = require('cors');
+
+const libroRouter = require("./routes/libro/libro.route");
+const personaRouter = require("./routes/persona/persona.route");
+const categoriaRouter = require("./routes/categoria/categoria.route");
 
 //Setting
 const app = express();
@@ -10,10 +12,13 @@ const port = process.env.PORT || 3000;
 //Middleswares
 app.use(express.json());
 
+//Cors
+app.use(cors());
+
 // rutas
-app.use("/books", booksRouter);
-app.use("/users", usersRouter);
-app.use("/categories", categoriesRouter);
+app.use("/libro", libroRouter);
+app.use("/persona", personaRouter);
+app.use("/categoria", categoriaRouter);
 
 // Starting the server
 app.listen(port, () => {
