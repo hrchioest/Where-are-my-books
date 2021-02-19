@@ -16,7 +16,7 @@ async function crearLibro(nombre, descripcion, categoria_id, persona_id){
 }
 
 async function traerLibros(){
-    const query = "SELECT * FROM libro";
+    const query = "SELECT libro.nombre, libro.descripcion, persona.alias, categoria.nombre AS categoria FROM libro, persona, categoria WHERE libro.persona_id = persona.id AND libro.categoria_id = categoria.id";
     return await qy(query);
 }
 
