@@ -8,10 +8,21 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <Router>
         <Header />
-        <ViewLibro />
-      </div>
+        <Switch>
+          <Route exact path='/libro'>
+            <ViewLibro />
+          </Route>
+          <Route exact path='/persona'>
+            <ViewLibro />
+          </Route>
+        </Switch>
+
+
+        
+        
+      </Router>
       
     )
   }
