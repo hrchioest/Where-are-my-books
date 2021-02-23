@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const LibrosPrestados = (persona_id) => {
+const LibrosPrestados = ({ persona_id }) => {
   const [libros, setLibros] = useState([]);
-  const url = "http://localhost:3000/persona";
+  console.log({ persona_id });
+  const url = "http://localhost:3000";
 
   useEffect(async () => {
-    const response = await axios.post(`${url}/persona/${persona_id}/libros`);
+    const response = await axios.get(`${url}/persona/${persona_id}/libros`);
     setLibros(response.data);
-  }, []);
+  }, [persona_id]);
 
   return (
     <>
-      {libros ? (
+      {libros.length > 0 ? (
         <ul>
           {libros.map((libro) => {
-            <li key={libro.id}>{libro.nombre}</li>;
+            return <li key={libro.id}>{libro.nombre}</li>;
           })}
         </ul>
       ) : (

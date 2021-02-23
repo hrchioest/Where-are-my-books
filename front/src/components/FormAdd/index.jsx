@@ -8,8 +8,7 @@ const FormAdd = () => {
     nombre: "",
     apellido: "",
     email: "",
-    alias: "",
-    libro_prestado: ""
+    alias: ""
   });
   const url = "http://localhost:3000";
 
@@ -45,8 +44,6 @@ const FormAdd = () => {
       <br />
       <label htmlFor=''>Alias</label>
       <input type='text' name='alias' onChange={handleData} />
-      <label htmlFor=''>Libro Prestado</label>
-      <input type='text' name='libro_prestado' onChange={handleData} />
 
       <div>
         <button onClick={addForm}>ADD</button>
