@@ -21,6 +21,11 @@ async function traerPersonas() {
   return await qy(query);
 }
 
+async function traerLibrosPorPersona(persona_id) {
+  const query = "SELECT * FROM libro WHERE persona_id = ?";
+  return await qy(query, [persona_id]);
+}
+
 async function traerPersonaPorId(id) {
   const query = "SELECT * FROM persona WHERE id = ?";
   const respuesta = await qy(query, [id]);
@@ -51,5 +56,6 @@ module.exports = {
   actualizarPersona: actualizarPersona,
   traerPersonaPorId: traerPersonaPorId,
   eliminarPersona: eliminarPersona,
+  traerLibrosPorPersona: traerLibrosPorPersona,
   existeLibrosConPersona: existeLibrosConPersona
 };
