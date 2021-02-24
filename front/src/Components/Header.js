@@ -11,7 +11,7 @@ class Header extends React.Component {
                 </div>
                 <Router>
                 <nav className='nav-main'>
-                    <Link to='/libro'>Libro</Link>
+                    <a href="/libro">Libro</a>
                     <a href="/genero">Genero</a>
                     <a href="/persona">Persona</a>
                 </nav>
