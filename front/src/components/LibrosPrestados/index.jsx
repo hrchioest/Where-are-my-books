@@ -3,12 +3,14 @@ import axios from "axios";
 
 const LibrosPrestados = ({ persona_id }) => {
   const [libros, setLibros] = useState([]);
-  console.log({ persona_id });
   const url = "http://localhost:3000";
 
-  useEffect(async () => {
-    const response = await axios.get(`${url}/persona/${persona_id}/libros`);
-    setLibros(response.data);
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(`${url}/persona/${persona_id}/libros`);
+      setLibros(response.data);
+    }
+    fetchData();
   }, [persona_id]);
 
   return (

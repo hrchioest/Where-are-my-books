@@ -1,13 +1,20 @@
 import React, { useEffect } from "react";
 import { DataContext } from "../../context/dataContext";
 import LibrosPrestados from "../LibrosPrestados";
+import axios from "axios";
 
 const FormPerson = () => {
   const { personas, getPersonas } = React.useContext(DataContext);
 
+  const handleDelete = async (id) => {
+    const url = "http://localhost:3000";
+    const response = await axios.delete(`${url}/persona/${id}`);
+    return response.data;
+  };
+
   useEffect(() => {
     getPersonas();
-  }, []);
+  }, [getPersonas]);
 
   return (
     <div>
@@ -33,7 +40,9 @@ const FormPerson = () => {
                 <LibrosPrestados persona_id={persona.id} />
               </td>
               <td>
-                <button>eliminar</button>
+                <button onClick={() => handleDelete(persona.id)}>
+                  eliminar
+                </button>
                 <button>editar</button>
               </td>
             </tr>
