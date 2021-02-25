@@ -15,6 +15,18 @@ class ViewLibro extends React.Component {
       })  
   }
 
+  handleClick = (b,id) => {
+    if(b==='editar'){
+      console.log('editar');
+  } else if(b==='eliminar'){
+      axios.delete(`http://localhost:3000/libro/${id}`)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+  }
+}
+
   render() {
     return (
       <div className='main-table'>
@@ -33,8 +45,8 @@ class ViewLibro extends React.Component {
             <td>{libro.descripcion}</td>
             <td>{libro.categoria}</td>
             <td>{libro.alias}</td>
-            <td><a href={"/edit/"+libro.id}><button>Editar</button></a></td>
-            <td><a href={"/delete/"+libro.id}><button>Eliminar</button></a></td>
+            <td><button onClick={()=>this.handleClick("editar")}>Editar</button></td>
+            <td><button onClick={()=>this.handleClick("eliminar",libro.id)}>Eliminar</button></td>
           </tr>
           )}
           
