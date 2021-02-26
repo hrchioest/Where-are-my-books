@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { DataContext } from "../../context/dataContext";
 import LibrosPrestados from "../LibrosPrestados";
-import axios from "axios";
 
 const FormPerson = () => {
-  const { personas, getPersonas } = React.useContext(DataContext);
-
-  const handleDelete = async (id) => {
-    const url = "http://localhost:3000";
-    const response = await axios.delete(`${url}/persona/${id}`);
-    return response.data;
-  };
+  const {
+    personas,
+    getPersonas,
+    getPersonId,
+    deletePersonas
+  } = React.useContext(DataContext);
 
   useEffect(() => {
     getPersonas();
-  }, [getPersonas]);
+  }, []);
+
+  console.log("render table person");
+
+  const handleData = async (id) => {
+    await deletePersonas(id);
+    getPersonas();
+  };
 
   return (
     <div>
@@ -40,10 +45,8 @@ const FormPerson = () => {
                 <LibrosPrestados persona_id={persona.id} />
               </td>
               <td>
-                <button onClick={() => handleDelete(persona.id)}>
-                  eliminar
-                </button>
-                <button>editar</button>
+                <button onClick={() => handleData(persona.id)}>eliminar</button>
+                <button onClick={() => getPersonId(persona.id)}>editar</button>
               </td>
             </tr>
           </tbody>
