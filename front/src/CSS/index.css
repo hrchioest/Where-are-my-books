@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace
+}
+
+
+.header{ 
+    background-color: #f59679;  
+    color: #3c3c3e;
+    text-align: center;
+    padding: 40px;
+}
+
+h1{ 
+    font-size: 72px;
+    padding: 14px;
+    color: #3c3c3e;
+}
+
+h2{ 
+    font-size: 24px;
+    padding: 14px;
+    text-align: center;
+    color: #3c3c3e;
+}
+
+h3{
+    font-size: 20px;
+    color: #3c3c3e;
+}
+
+p{
+    font-size: 18px;
+    color: #3c3c3e;
+}
+
+.nav-main{
+    padding: 10px;
+}
+
+.header a{ 
+    text-decoration: none;
+    color: #3c3c3e;
+    margin: 30px;
+    font-size: 24px;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size .3s;
+}
+
+.header a:hover, a:focus{ 
+    color: cornsilk;
+    background-size: 100% 2px;
+}
+
+.book{
+    display: flex;
+    flex-direction: row;
+}
+
+.main-table{
+    background-color: #3c3c3e;
+    color: #f59679;
+    width: 70%;
+    padding: 10px;
+}
+
+.table{
+    width: 100%;
+    padding: 10px;
+}
+
+.table td strong{
+    font-size: 18px;
+}
+
+.table td{
+    font-size: 16px;
+}
+
+.table button{
+    background-color: #f59679;
+    color: #3c3c3e; 
+    padding: 2px;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.newLibro-form{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    background-color: rgb(204, 196, 189);
+    padding: 10px;
+}
+
+.newLibro-form input{
+    width: 50%;
+    margin: 5px auto;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.newLibro-form button{
+    width: 50%;
+    margin: 5px auto;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.footer{
+    display: flex;
+    background-color: #f59679;  
+    color: #3c3c3e;
+    text-align: center;
+    padding: 14px;
+    align-items:center;
+    justify-content: space-around;
+}
+
+.footer-i{
+    width: 50%;
+    display: flex;
+    justify-content: space-between
+}
