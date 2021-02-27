@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DataContext } from "../../context/dataContext";
-import axios from "axios";
 
 const FormAdd = () => {
   const {
@@ -10,8 +9,6 @@ const FormAdd = () => {
     personaEditar: person,
     setPersonaEditar
   } = React.useContext(DataContext);
-
-  const url = "http://localhost:3000";
 
   const handleData = (e) => {
     let { name, value } = e.target;
@@ -30,9 +27,9 @@ const FormAdd = () => {
   const handleUpData = async () => {
     const dataPersona = { ...person };
     delete dataPersona.email;
-
     await putPersonas(person.id, dataPersona);
     getPersonas();
+    setPersonaEditar({ nombre: "", apellido: "", email: "", alias: "" });
   };
 
   const isEdit = person.id > 0;

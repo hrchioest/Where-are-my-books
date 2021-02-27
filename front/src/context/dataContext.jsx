@@ -20,6 +20,11 @@ export const DataProvider = (props) => {
     setPersonas(response.data);
   };
 
+  const getLibrosPorPersona = async (persona_id) => {
+    const response = await axios.get(`${url}/persona/${persona_id}/libros`);
+    return response.data;
+  };
+
   const getPersonId = async (id) => {
     const response = await axios.get(`${url}/persona/${id}`);
     setPersonaEditar(response.data);
@@ -37,6 +42,10 @@ export const DataProvider = (props) => {
     await axios.delete(`${url}/persona/${id}`);
   };
 
+  const hasBooksPerson = async (id) => {
+    return (await getLibrosPorPersona(id).length) > 0;
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -47,7 +56,9 @@ export const DataProvider = (props) => {
         setPersonaEditar,
         postPersonas,
         putPersonas,
-        deletePersonas
+        getLibrosPorPersona,
+        deletePersonas,
+        hasBooksPerson
       }}
     >
       {props.children}

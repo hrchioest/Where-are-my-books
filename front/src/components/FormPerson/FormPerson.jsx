@@ -1,24 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DataContext } from "../../context/dataContext";
 import LibrosPrestados from "../LibrosPrestados";
+import Modal from "../Modal/Modal";
 
 const FormPerson = () => {
   const {
     personas,
     getPersonas,
     getPersonId,
-    deletePersonas
+    deletePersonas,
+    hasBooksPerson
   } = React.useContext(DataContext);
 
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     getPersonas();
   }, []);
 
-  console.log("render table person");
-
   const handleData = async (id) => {
-    await deletePersonas(id);
-    getPersonas();
+    const showAlertNotDelete = hasBooksPerson(id);
+    if (showAlertNotDelete) {
+      setShowModal(showAlertNotDelete);
+    } else {
+      await deletePersonas(id);
+      getPersonas();
+    }
   };
 
   return (
@@ -52,6 +58,8 @@ const FormPerson = () => {
           </tbody>
         ))}
       </table>
+      {}
+      <Modal show={showModal} />
     </div>
   );
 };

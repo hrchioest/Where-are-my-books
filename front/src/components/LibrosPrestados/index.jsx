@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { DataContext } from "../../context/dataContext";
 
 const LibrosPrestados = ({ persona_id }) => {
-  const [libros, setLibros] = useState([]);
-  const url = "http://localhost:3000";
+  const { getLibrosPorPersona } = React.useContext(DataContext);
 
+  const [libros, setLibros] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const response = await axios.get(`${url}/persona/${persona_id}/libros`);
-      setLibros(response.data);
+      setLibros(await getLibrosPorPersona(persona_id));
     }
     fetchData();
-  }, [persona_id]);
+  }, []);
 
   return (
     <>
