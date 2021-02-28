@@ -10,12 +10,26 @@ GET '/libro' - Devuelve todos los libros o mensaje de error con status 413.
 */
 router.get("/", async (req, res) => {
   try {
+    const respuesta = await query.traerLibros({...req.query});
+    res.send(respuesta);
+  } catch (e) {
+    res.status(413).send({ error: "Error inesperado" });
+  }
+});
+
+
+/*
+GET '/libro/categories' - Devuelve todos los libros o mensaje de error con status 413.
+*/
+router.get("/", async (req, res) => {
+  try {
     const respuesta = await query.traerLibros();
     res.send(respuesta);
   } catch (e) {
     res.status(413).send({ error: "Error inesperado" });
   }
 });
+
 
 /*
 POST '/libro' recibe: {nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}
