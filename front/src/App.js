@@ -6,8 +6,12 @@ import { DataProvider } from "./context/DataContext";
 function App() {
   return (
     <DataProvider>
-      <TablePersons />
+      <PersonsTable />
       <PersonForm />
+      <BooksTable />
+      <BookForm />
+      <CategoriesTable />
+      <CategoriaForm />
     </DataProvider>
   );
 }
