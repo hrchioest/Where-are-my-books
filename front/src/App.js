@@ -1,5 +1,5 @@
 import "./App.css";
-import FormAdd from "./components/FormAdd/FormAdd";
+import PersonForm from "./components/PersonForm/PersonForm";
 import TableBooks from "./components/TableBooks/TableBooks";
 import TablePersons from "./components/TablePersons/TablePersons";
 
@@ -9,7 +9,7 @@ function App() {
   return (
     <DataProvider>
       <TablePersons />
-      <FormAdd />
+      <PersonForm />
       <TableBooks />
     </DataProvider>
   );
