@@ -16,21 +16,17 @@ async function crearLibro(nombre, descripcion, categoria_id, persona_id) {
   return await qy(query, [nombre, descripcion, categoria_id, persona_id]);
 }
 
-async function traerLibros() {
-  const query = "SELECT * FROM libro";
-  return await qy(query);
+async function traerLibros({categoria_id}) {
+  const query = `SELECT * FROM libro ${categoria_id ? ' WHERE categoria_id = ? ': ''}`;
+  return await qy(query, [categoria_id]);
 }
+
 
 async function traerLibroPorId(id) {
   const query = "SELECT * FROM libro WHERE id = ?";
   const respuesta = await qy(query, [id]);
   return respuesta.length === 1 ? respuesta[0] : null;
 }
-
-// async function traerPersonaPorLibro(id) {
-//     const query = "SELECT * FROM libro WHERE persona_id = ?";
-//     return await qy(query, [persona_id]);
-//   }
 
 async function eliminarLibro(id) {
   const query = "DELETE FROM libro WHERE id=?";
