@@ -10,7 +10,6 @@ function App() {
     <DataProvider>
       <TablePersons />
       <PersonForm />
-      <TableBooks />
     </DataProvider>
   );
 }
