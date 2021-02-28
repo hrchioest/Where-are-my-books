@@ -1,19 +1,21 @@
 import "./App.css";
-import PersonForm from "./components/PersonForm/PersonForm";
-import TablePersons from "./components/TablePersons/TablePersons";
+import PersonsForm from "./components/PersonsForm/PersonsForm";
+import PersonsTable from "./components/PersonsTable/PersonTable";
 import BooksTable from "./components/BooksTable/BooksTable";
-import BooksForm from "./components/BookForm/BookForm";
+import BooksForm from "./components/BooksForm/BooksForm";
+import CategoriesForm from "./components/CategoriesForm/CategoriesForm";
+import CategoriesTable from "./components/CategoriesTable/CategoriesTable";
 import { DataProvider } from "./context/DataContext";
 
 function App() {
   return (
     <DataProvider>
       <PersonsTable />
-      <PersonForm />
+      <PersonsForm />
       <BooksTable />
-      <BookForm />
+      <BooksForm />
       <CategoriesTable />
-      <CategoriaForm />
+      <CategoriesForm />
     </DataProvider>
   );
 }
