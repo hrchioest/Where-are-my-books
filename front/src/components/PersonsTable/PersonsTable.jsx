@@ -3,29 +3,36 @@ import { DataContext } from "../../context/DataContext";
 import BorrowedBooks from "../BorrowedBooks/BorrowedBooks";
 import Modal from "../Modal/Modal";
 
-const FormPersons = () => {
+const PersonsTable = () => {
   const {
     persons,
     getPersons,
     getPersonId,
     deletePersons,
-    hasBooksPerson
   } = React.useContext(DataContext);
 
   const [showModal, setShowModal] = useState(false);
+  const [modalText, setModalText] = React.useState('');
+
   useEffect(() => {
     getPersons();
   }, []);
 
-  const handleData = async (id) => {
-    // const showAlertNotDelete = hasBooksPerson(id);
-    // if (showAlertNotDelete) {
-    //   setShowModal(showAlertNotDelete);
-    // } else {
-    //   await deletePersons(id);
-    //   getPersons();
-    // }
+  const handleEliminarPersona = async (id) => {
+      const response = await deletePersons(id);
+
+      if('error' in response){
+        setShowModal(true);
+        setModalText(response.error);
+        return;
+      }
+
+      getPersons();
   };
+
+  const onShow = ()=>{
+    setShowModal(!showModal);
+  }
 
   return (
     <div>
@@ -51,7 +58,7 @@ const FormPersons = () => {
                 <BorrowedBooks persona_id={persona.id} />
               </td>
               <td>
-                <button onClick={() => handleData(persona.id)}>eliminar</button>
+                <button onClick={() => handleEliminarPersona(persona.id)}>eliminar</button>
                 <button onClick={() => getPersonId(persona.id)}>editar</button>
               </td>
             </tr>
@@ -61,12 +68,11 @@ const FormPersons = () => {
       {}
       <Modal
         show={showModal}
-        const
-        modalText='Esta acción no se puede realizar, porque la persona tiene 
-        libros prestados'
+        onShow={onShow}
+        modalText={modalText}
       />
     </div>
   );
 };
 
-export default FormPersons;
+export default PersonsTable;

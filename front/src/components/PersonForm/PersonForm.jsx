@@ -1,7 +1,9 @@
 import React from "react";
 import { DataContext } from "../../context/DataContext";
+import Modal from "../Modal/Modal";
 
-const FormAdd = () => {
+
+const PersonForm = () => {
   const {
     getPersons,
     postPersons,
@@ -9,6 +11,10 @@ const FormAdd = () => {
     personEdit: person,
     setPersonEdit
   } = React.useContext(DataContext);
+
+  const [showModal, setShowModal] = React.useState(false);
+  const [modalText, setModalText] = React.useState('');
+
 
   const handleData = (e) => {
     let { name, value } = e.target;
@@ -18,8 +24,15 @@ const FormAdd = () => {
     });
   };
 
-  const onAdd = async () => {
-    await postPersons(person);
+  const handleCreate = async () => {
+    const response = await postPersons(person);
+
+    if('error' in response){
+      setShowModal(true);
+      setModalText(response.error);
+      return;
+    }
+
     getPersons();
     setPersonEdit({ nombre: "", apellido: "", email: "", alias: "" });
   };
@@ -27,12 +40,27 @@ const FormAdd = () => {
   const handleUpData = async () => {
     const dataPerson = { ...person };
     delete dataPerson.email;
-    await putPersons(person.id, dataPerson);
+
+    const response = await putPersons(person.id, dataPerson);
+
+    console.log(response);
+
+    if('error' in response){
+      setShowModal(true);
+      setModalText(response.error);
+      return;
+    }
+
     getPersons();
     setPersonEdit({ nombre: "", apellido: "", email: "", alias: "" });
   };
 
   const isEdit = person.id > 0;
+
+
+  const onShow = ()=>{
+    setShowModal(!showModal);
+  }
 
   return (
     <div>
@@ -73,13 +101,20 @@ const FormAdd = () => {
 
       <div>
         {isEdit ? (
-          <button onClick={() => handleUpData()}>ADD</button>
+          <button onClick={() => handleUpData()}>Editar</button>
         ) : (
-          <button onClick={onAdd}>ADD</button>
+          <button onClick={handleCreate}>Crear</button>
         )}
       </div>
+
+
+    <Modal
+        show={showModal}
+        onShow={onShow}
+        modalText={modalText}
+      />
     </div>
   );
 };
 
-export default FormAdd;
+export default PersonForm;

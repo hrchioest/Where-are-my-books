@@ -1,4 +1,4 @@
-const Modal = ({ show, modalText }) => {
+const Modal = ({ show, modalText, onShow }) => {
   return (
     <>
       <div
@@ -9,7 +9,7 @@ const Modal = ({ show, modalText }) => {
           <form action='#'>
             <div className='modal-header'>
               <h2 className='modal-title'>Alerta!</h2>
-              <button className='js-boton-cancel boton-cancel-x'>x</button>
+              <button onClick={onShow} className='js-boton-cancel boton-cancel-x'>x</button>
             </div>
             <div className='modal-body'>
               <p id='modal-alerta' className='modal-alerta'>
@@ -17,7 +17,7 @@ const Modal = ({ show, modalText }) => {
               </p>
             </div>
             <div className='modal-footer'>
-              <button className='boton-cancel js-boton-cancel' type='button'>
+              <button onClick={onShow} className='boton-cancel js-boton-cancel' type='button'>
                 Cancel
               </button>
             </div>
