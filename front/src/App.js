@@ -8,10 +8,12 @@ import { DataProvider } from "./context/DataContext";
 function App() {
   return (
     <DataProvider>
-      <TablePersons />
+      <PersonsTable />
       <PersonForm />
       <BooksTable />
-      <BooksForm />
+      <BookForm />
+      <CategoriesTable />
+      <CategoriaForm />
     </DataProvider>
   );
 }
