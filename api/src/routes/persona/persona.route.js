@@ -69,6 +69,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/:id/libros", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const libros = await query.traerLibrosPorPersona(id);
+    res.send(libros);
+  } catch (e) {
+    console.error(e.message);
+    res.status(413).send({ error: e.message });
+  }
+});
+
 /*
  PUT '/persona/:id' recibe: {nombre: string, apellido: string, alias: string, email: string}
  el email no se puede modificar. retorna status 200 y el objeto modificado o bien status 413, 
