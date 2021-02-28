@@ -6,8 +6,9 @@ export const DataContext = React.createContext();
 export const useDataContext = () => React.useContext(DataContext);
 
 export const DataProvider = (props) => {
-  const [personas, setPersonas] = useState([]);
-  const [personaEditar, setPersonaEditar] = useState({
+  const [persons, setPersons] = useState([]);
+  const [books, setBooks] = useState([]);
+  const [personEdit, setPersonEdit] = useState({
     nombre: "",
     apellido: "",
     email: "",
@@ -15,50 +16,68 @@ export const DataProvider = (props) => {
   });
 
   const url = "http://localhost:3000";
-  const getPersonas = async () => {
+
+  //Funciones de Personas:
+  const getPersons = async () => {
     const response = await axios.get(`${url}/persona`);
-    setPersonas(response.data);
+    setPersons(response.data);
   };
 
-  const getLibrosPorPersona = async (persona_id) => {
+  const getBooksByPerson = async (persona_id) => {
     const response = await axios.get(`${url}/persona/${persona_id}/libros`);
     return response.data;
   };
 
   const getPersonId = async (id) => {
     const response = await axios.get(`${url}/persona/${id}`);
-    setPersonaEditar(response.data);
+    setPersonEdit(response.data);
   };
 
-  const postPersonas = async (person) => {
+  const postPersons = async (person) => {
     await axios.post(`${url}/persona`, person);
   };
 
-  const putPersonas = async (id, person) => {
+  const putPersons = async (id, person) => {
     await axios.put(`${url}/persona/${id}`, person);
   };
 
-  const deletePersonas = async (id) => {
+  const deletePersons = async (id) => {
     await axios.delete(`${url}/persona/${id}`);
   };
 
   const hasBooksPerson = async (id) => {
-    return (await getLibrosPorPersona(id).length) > 0;
+    return (await getBooksByPerson(id).length) > 0;
   };
+
+  //Funciones de libros:
+  const getBooks = async () => {
+    const response = await axios.get(`${url}/libro`);
+    setBooks(response.data);
+  };
+  const deleteBooks = async (id) => {
+    await axios.delete(`${url}/persona/${id}`);
+  };
+  // const getPersonByBook = async (persona_id) => {
+  //   const response = await axios.get(`${url}/libro/${persona_id}/libros`);
+  //   return response.data;
+  // };
 
   return (
     <DataContext.Provider
       value={{
-        personas,
-        getPersonas,
+        persons,
+        books,
+        getBooks,
+        getPersons,
         getPersonId,
-        personaEditar,
-        setPersonaEditar,
-        postPersonas,
-        putPersonas,
-        getLibrosPorPersona,
-        deletePersonas,
-        hasBooksPerson
+        personEdit,
+        setPersonEdit,
+        postPersons,
+        putPersons,
+        getBooksByPerson,
+        deletePersons,
+        hasBooksPerson,
+        deleteBooks
       }}
     >
       {props.children}

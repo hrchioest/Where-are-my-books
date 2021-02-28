@@ -1,14 +1,16 @@
 import "./App.css";
-import FormAdd from "./components/FormAdd";
-import FormPerson from "./components/FormPerson/FormPerson";
-import Modal from "./components/Modal/Modal";
-import { DataProvider } from "./context/dataContext";
+import FormAdd from "./components/FormAdd/FormAdd";
+import TableBooks from "./components/TableBooks/TableBooks";
+import TablePersons from "./components/TablePersons/TablePersons";
+
+import { DataProvider } from "./context/DataContext";
 
 function App() {
   return (
     <DataProvider>
-      <FormPerson />
+      <TablePersons />
       <FormAdd />
+      <TableBooks />
     </DataProvider>
   );
 }

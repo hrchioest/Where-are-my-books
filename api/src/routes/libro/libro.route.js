@@ -25,7 +25,6 @@ o bien status 413,  {mensaje: <descripcion del error>} que puede ser "error ines
 */
 
 router.post("/", async (req, res) => {
-
   const nombre = req.body.nombre;
   const categoria_id = req.body.categoria_id;
   let persona_id = req.body.persona_id;
@@ -44,11 +43,13 @@ router.post("/", async (req, res) => {
     }
 
     // consulto si el id existe en categorias de libros
-    const existeCategoria = await queryCategoria.traerCategoriaPorId(categoria_id);
+    const existeCategoria = await queryCategoria.traerCategoriaPorId(
+      categoria_id
+    );
     if (!existeCategoria) {
       throw new Error("No existe la categoría indicada");
     }
-    
+
     // Verifico si persona_id es numerico y valido si corresponde a un usuario registrado sino sería null
     // y al ser null sería un libro que no lo tiene ninguna persona.
     if (Number.isInteger(persona_id)) {
@@ -58,10 +59,14 @@ router.post("/", async (req, res) => {
       persona_id = null;
     }
 
-
     // Si todo lo anterior esta correcto se procede al guardado en la DB y persona_id se guardará siendo validada
     //anteriormente.
-    const respuesta = await query.crearLibro(nombre, descripcion, categoria_id, persona_id);
+    const respuesta = await query.crearLibro(
+      nombre,
+      descripcion,
+      categoria_id,
+      persona_id
+    );
 
     //Devolviendo los datos ingresados del nuevo libro
     const libro = await query.traerLibroPorId(respuesta.insertId);
@@ -91,6 +96,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// router.get("/:id", async (req, res) =>{
+//   const id= req.params.id;
+//   try{
+//     const persona = await query.traerPersonaPorLibro(id);
+//     res.send(persona)
+//   }catch (e) {
+//     console.error(e.message);
+//     res.status(413).send({ error: e.message });
+//   }
+// }
 /* 
 PUT '/libro/:id' y {id: numero, nombre:string, descripcion:string, categoria_id:numero,
 persona_id:numero/null} devuelve status 200 y {id: numero, nombre:string, descripcion:string,
@@ -102,7 +117,11 @@ router.put("/:id", async (req, res) => {
   const descripcion = req.body.descripcion;
 
   try {
-    if ( "nombre" in req.body || "categoria_id" in req.body || "persona_id" in req.body) {
+    if (
+      "nombre" in req.body ||
+      "categoria_id" in req.body ||
+      "persona_id" in req.body
+    ) {
       throw new Error("Sólo se puede modificar la descripción del libro");
     }
 
@@ -112,7 +131,7 @@ router.put("/:id", async (req, res) => {
     }
 
     // Realizo la modificacion.
-    const respuesta = await query.actualizarLibro(id, descripcion)
+    const respuesta = await query.actualizarLibro(id, descripcion);
 
     // Devuelvo el dato modificado
     const libro = await query.traerLibroPorId(id);
@@ -141,7 +160,7 @@ router.delete("/:id", async (req, res) => {
     }
 
     // Realizo el borrado
-    await query.eliminarLibro(id)
+    await query.eliminarLibro(id);
 
     res.send({ mensaje: "Se borró correctamente" });
   } catch (e) {
@@ -205,7 +224,7 @@ router.put("/devolver/:id", async (req, res) => {
     }
 
     await query.devolverLibro(id);
- 
+
     res.send({ mensaje: "Se realizó la devolución correctamente" });
   } catch (e) {
     res.status(413).send({ error: e.message });

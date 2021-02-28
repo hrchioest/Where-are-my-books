@@ -1,4 +1,4 @@
-const Modal = ({ show }) => {
+const Modal = ({ show, modalText }) => {
   return (
     <>
       <div
@@ -13,8 +13,7 @@ const Modal = ({ show }) => {
             </div>
             <div className='modal-body'>
               <p id='modal-alerta' className='modal-alerta'>
-                Esta acción no se puede realizar, porque la persona tiene libros
-                prestados
+                {modalText}
               </p>
             </div>
             <div className='modal-footer'>
