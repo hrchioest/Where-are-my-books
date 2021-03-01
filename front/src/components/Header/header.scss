@@ -1,0 +1,50 @@
+.header {
+  background-color: #f59679;
+  color: #3c3c3e;
+  text-align: center;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 72px;
+  padding: 14px;
+  color: #3c3c3e;
+}
+
+h2 {
+  font-size: 24px;
+  padding: 14px;
+  text-align: center;
+  color: #3c3c3e;
+}
+
+h3 {
+  font-size: 20px;
+  color: #3c3c3e;
+}
+
+p {
+  font-size: 18px;
+  color: #3c3c3e;
+}
+
+.nav-main {
+  padding: 10px;
+}
+.header .nav-main-link {
+  text-decoration: none;
+  color: #3c3c3e;
+  margin: 30px;
+  font-size: 24px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 0.3s;
+}
+
+.header .nav-main-link:hover,
+.nav-main-link:focus {
+  color: cornsilk;
+  background-size: 100% 2px;
+}
