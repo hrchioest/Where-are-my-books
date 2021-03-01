@@ -4,7 +4,7 @@ _Proyecto: Where are my books? 🔍 📕📗📘 ._
 
 ## ¿Que es? 📋
 
-_Proyecto de desarrollo backend en NodeJS, utilizando API Rest y base de datos MySQL para conocer si los libros del usuario se encuentran en su biblioteca o prestados. En caso de estar prestado, a quien se los presto._
+_Proyecto de desarrollo en backend con NodeJS y de Frontend con ReactJS,  utilizando API Rest y base de datos MySQL para conocer si los libros del usuario se encuentran en su biblioteca o prestados. En caso de estar prestado, a quien se los presto._
 
 #### Nota:
 
@@ -48,6 +48,11 @@ ALTER TABLE `libro`
   ADD CONSTRAINT `libro_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`),
   ADD CONSTRAINT `libro_ibfk_2` FOREIGN KEY (`persona_id`) REFERENCES `persona` (`id`);
 COMMIT;
+```
+- Para hacer correr el proyecto en React:
+
+```ssh
+$ yarn start 
 ```
 
 ### Integrantes (Grupo C) ✒️
