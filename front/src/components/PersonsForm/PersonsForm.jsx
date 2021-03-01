@@ -1,7 +1,7 @@
 import React from "react";
 import { DataContext } from "../../context/DataContext";
 import Modal from "../Modal/Modal";
-
+import "../../sass/styleForm.scss";
 
 const PersonForm = () => {
   const {
@@ -13,8 +13,7 @@ const PersonForm = () => {
   } = React.useContext(DataContext);
 
   const [showModal, setShowModal] = React.useState(false);
-  const [modalText, setModalText] = React.useState('');
-
+  const [modalText, setModalText] = React.useState("");
 
   const handleData = (e) => {
     let { name, value } = e.target;
@@ -27,7 +26,7 @@ const PersonForm = () => {
   const handleCreate = async () => {
     const response = await postPersons(person);
 
-    if('error' in response){
+    if ("error" in response) {
       setShowModal(true);
       setModalText(response.error);
       return;
@@ -45,7 +44,7 @@ const PersonForm = () => {
 
     console.log(response);
 
-    if('error' in response){
+    if ("error" in response) {
       setShowModal(true);
       setModalText(response.error);
       return;
@@ -57,62 +56,58 @@ const PersonForm = () => {
 
   const isEdit = person.id > 0;
 
-
-  const onShow = ()=>{
+  const onShow = () => {
     setShowModal(!showModal);
-  }
+  };
 
   return (
-    <div>
-      <br />
-      <br />
-      <label htmlFor=''>Nombre</label>
+    <div className='newLibro-form'>
+      {isEdit ? <h2>Editar Persona</h2> : <h2>Añadir Persona</h2>}
+
       <input
         type='text'
         value={person.nombre}
         name='nombre'
         onChange={handleData}
+        placeholder='Nombre'
       />
-      <br />
-      <label htmlFor=''>Apellido</label>
+
       <input
         type='text'
         value={person.apellido}
         name='apellido'
         onChange={handleData}
+        placeholder='Apellido'
       />
-      <br />
-      <label htmlFor=''>Mail</label>
+
       <input
         disabled={isEdit}
         type='email'
         name='email'
         value={person.email}
         onChange={handleData}
+        placeholder='Mail'
       />
-      <br />
-      <label htmlFor=''>Alias</label>
+
       <input
         type='text'
         name='alias'
         value={person.alias}
         onChange={handleData}
+        placeholder='Alias'
       />
 
-      <div>
-        {isEdit ? (
-          <button onClick={() => handleUpData()}>Editar</button>
-        ) : (
-          <button onClick={handleCreate}>Crear</button>
-        )}
-      </div>
+      {isEdit ? (
+        <button className='button-form' onClick={() => handleUpData()}>
+          Editar
+        </button>
+      ) : (
+        <button className='button-form' onClick={handleCreate}>
+          Crear
+        </button>
+      )}
 
-
-    <Modal
-        show={showModal}
-        onShow={onShow}
-        modalText={modalText}
-      />
+      <Modal show={showModal} onShow={onShow} modalText={modalText} />
     </div>
   );
 };

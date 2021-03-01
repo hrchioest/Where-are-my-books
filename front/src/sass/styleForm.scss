@@ -1,0 +1,34 @@
+.newLibro-form {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  background-color: rgb(204, 196, 189);
+  padding: 10px;
+}
+
+.newLibro-form input {
+  width: 50%;
+  margin: 5px auto;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+select {
+  margin: 6px auto;
+  font-size: 16px;
+  width: 54%;
+  height: 32px;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.button-form {
+  background-color: #3c3c3e;
+  color: #f59679;
+  width: 54%;
+  margin: 5px auto;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 16px;
+}
