@@ -13,9 +13,9 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          {/* <Route exact path='/'>
+          <Route exact path='/'>
             <ContentBooks />
-          </Route> */}
+          </Route>
           <Route exact path='/personas'>
             <ContentPersons />
           </Route>
