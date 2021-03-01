@@ -1,0 +1,33 @@
+.main-table {
+  background-color: #3c3c3e;
+  color: #f59679;
+  width: 70%;
+  padding: 10px;
+}
+.table button {
+  background-color: #f59679;
+  color: #3c3c3e;
+  padding: 2px;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.table {
+  width: 100%;
+  padding: 10px;
+}
+
+.table td {
+  width: 15%;
+  text-align: center;
+}
+th,
+td {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.table button {
+  padding: 5%;
+}

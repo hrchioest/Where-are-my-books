@@ -1,6 +1,7 @@
 import React from "react";
 import { DataContext } from "../../context/DataContext";
 import Modal from "../Modal/Modal";
+import "../../sass/styleForm.scss";
 
 const BookForm = () => {
   const {
@@ -8,13 +9,11 @@ const BookForm = () => {
     setBookEdit,
     putBook,
     getBooks,
-    postBook,
+    postBook
   } = React.useContext(DataContext);
 
   const [showModal, setShowModal] = React.useState(false);
-  const [modalText, setModalText] = React.useState('');
-
-
+  const [modalText, setModalText] = React.useState("");
 
   const handleData = (e) => {
     let { name, value } = e.target;
@@ -25,94 +24,87 @@ const BookForm = () => {
   };
 
   const handleCreate = async () => {
-
     const response = await postBook(book);
 
-    if('error' in response){
+    if ("error" in response) {
       setShowModal(true);
       setModalText(response.error);
       return;
     }
 
     getBooks();
-    setBookEdit({ nombre: "",
-    descripcion: "",
-    categoria_id: "",
-    persona_id: "" });
+    setBookEdit({
+      nombre: "",
+      descripcion: "",
+      categoria_id: "",
+      persona_id: ""
+    });
   };
 
   const handleUpdate = async () => {
-    const {descripcion, books} = { ...book };
-    await putBook(book.id, {descripcion});
+    const { descripcion, books } = { ...book };
+    await putBook(book.id, { descripcion });
     getBooks();
-    setBookEdit({ nombre: "",
-    descripcion: "",
-    categoria_id: "",
-    persona_id: "" });
+    setBookEdit({
+      nombre: "",
+      descripcion: "",
+      categoria_id: "",
+      persona_id: ""
+    });
   };
 
   const isEdit = book.id > 0;
 
-  const onShow = ()=>{
+  const onShow = () => {
     setShowModal(!showModal);
-  }
+  };
 
+  return (
+    <>
+      <div class='newLibro-form'>
+        <h2>Añadir libro</h2>
+        <input
+          disabled={isEdit}
+          type='text'
+          value={book.nombre}
+          name='nombre'
+          onChange={handleData}
+          placeholder='Nombre'
+        />
+        <input
+          type='text'
+          name='descripcion'
+          value={book.descripcion}
+          onChange={handleData}
+          placeholder='Descripcion'
+        />
 
-  return (<>
-    <div>
-      <br />
-      <br />
-      <label htmlFor=''>Nombre</label>
-      <input
-        disabled={isEdit}
-        type='text'
-        value={book.nombre}
-        name='nombre'
-        onChange={handleData}
-      />
-      <br />
-      <label htmlFor=''>Descripción</label>
-      <input
-        type='text'
-        name='descripcion'
-        value={book.descripcion}
-        onChange={handleData}
-      />
-      <br />
-      <label htmlFor=''>Categoria</label>
-      <input
-        disabled={isEdit}
-        type='text'
-        value={book.categoria_id}
-        name='categoria_id'
-        onChange={handleData}
-      />
-      <br />
-      <label htmlFor=''>Persona</label>
-      <input
-        disabled={isEdit}
-        type='text'
-        name='persona_id'
-        value={book.persona_id}
-        onChange={handleData}
-      />
-      <br />
-
-
-      <div>
-        {isEdit ? (
-          <button onClick={handleUpdate}>Editar</button>
-        ) : (
-          <button onClick={handleCreate}>Crear</button>
-        )}
+        <input
+          disabled={isEdit}
+          type='text'
+          value={book.categoria_id}
+          name='categoria_id'
+          onChange={handleData}
+          placeholder='Categoria_id'
+        />
+        <input
+          disabled={isEdit}
+          type='text'
+          name='persona_id'
+          value={book.persona_id}
+          onChange={handleData}
+          placeholder='Persona_id'
+        />
+        <>
+          {isEdit ? (
+            <button onClick={handleUpdate}>Editar</button>
+          ) : (
+            <button onClick={handleCreate}>Guardar</button>
+          )}
+        </>
       </div>
-    </div>
-    <Modal
-    show={showModal}
-    onShow={onShow}
-    modalText={modalText}
-  />
-  </>
+      <Modal show={showModal} onShow={onShow} modalText={modalText} />
+    </>
   );
 };
 

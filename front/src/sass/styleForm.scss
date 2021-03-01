@@ -1,0 +1,26 @@
+.newLibro-form {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  background-color: rgb(204, 196, 189);
+  padding: 10px;
+}
+
+.newLibro-form input {
+  width: 50%;
+  margin: 5px auto;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+button {
+  background-color: #3c3c3e;
+  color: #f59679;
+  width: 54%;
+  margin: 5px auto;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 16px;
+}
