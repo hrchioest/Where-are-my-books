@@ -1,4 +1,4 @@
-## UTN-BA - Trabajo práctico del Módulo 3 y 4 INTEGRADOR (Backend) y Trabajo práctico del Módulo 5 y 6 INTEGRADOR (Frontend)  🚀
+## UTN-BA - Trabajo Integrador Módulo 3 y 4 (Backend) y Módulo 5 y 6 (Frontend)  🚀
 
 _Proyecto: Where are my books? 🔍 📕📗📘 ._
 
