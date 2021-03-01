@@ -9,13 +9,17 @@ const BookForm = () => {
     setBookEdit,
     putBook,
     getBooks,
-    postBook
+    postBook,
+    categories,
+    postPersons,
+    persons
   } = React.useContext(DataContext);
 
   const [showModal, setShowModal] = React.useState(false);
   const [modalText, setModalText] = React.useState("");
 
   const handleData = (e) => {
+    console.log("targ", e.target);
     let { name, value } = e.target;
 
     setBookEdit((state) => {
@@ -36,11 +40,11 @@ const BookForm = () => {
     setBookEdit({
       nombre: "",
       descripcion: "",
-      categoria_id: "",
-      persona_id: ""
+      categoria_id: "categorias",
+      persona_id: "personas"
     });
   };
-
+  console.log("book", book);
   const handleUpdate = async () => {
     const { descripcion, books } = { ...book };
     await putBook(book.id, { descripcion });
@@ -48,8 +52,8 @@ const BookForm = () => {
     setBookEdit({
       nombre: "",
       descripcion: "",
-      categoria_id: "",
-      persona_id: ""
+      categoria_id: "categorias",
+      persona_id: "personas"
     });
   };
 
@@ -61,8 +65,8 @@ const BookForm = () => {
 
   return (
     <>
-      <div class='newLibro-form'>
-        <h2>Añadir libro</h2>
+      <div className='newLibro-form'>
+        {isEdit ? <h2>Editar libro</h2> : <h2>Añadir libro</h2>}
         <input
           disabled={isEdit}
           type='text'
@@ -79,27 +83,33 @@ const BookForm = () => {
           placeholder='Descripcion'
         />
 
-        <input
-          disabled={isEdit}
-          type='text'
-          value={book.categoria_id}
-          name='categoria_id'
-          onChange={handleData}
-          placeholder='Categoria_id'
-        />
-        <input
-          disabled={isEdit}
-          type='text'
-          name='persona_id'
-          value={book.persona_id}
-          onChange={handleData}
-          placeholder='Persona_id'
-        />
+        <select name='categoria_id' onChange={handleData}>
+          <option value='categorias'>Categorias</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id} disabled={isEdit}>
+              {category.nombre}
+            </option>
+          ))}
+        </select>
+
+        <select name='persona_id' onChange={handleData}>
+          <option value='personas'>Personas</option>
+          {persons.map((person) => (
+            <option key={person.id} value={person.id} disabled={isEdit}>
+              {person.alias}
+            </option>
+          ))}
+        </select>
+
         <>
           {isEdit ? (
-            <button onClick={handleUpdate}>Editar</button>
+            <button className='button-form' onClick={handleUpdate}>
+              Editar
+            </button>
           ) : (
-            <button onClick={handleCreate}>Guardar</button>
+            <button className='button-form' onClick={handleCreate}>
+              Guardar
+            </button>
           )}
         </>
       </div>

@@ -161,6 +161,7 @@ export const DataProvider = (props) => {
     }
   };
 
+  //Funciones de Categorias
   const getCategories = async () => {
     try {
       const categoriesResponse = await axios.get(`${url}/categoria`);

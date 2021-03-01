@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./header.scss";
 
 const Header = () => {
@@ -10,15 +10,15 @@ const Header = () => {
         <h2>Where are my books?</h2>
       </div>
       <nav className='nav-main'>
-        <NavLink class='nav-main-link' to='/libros'>
+        <Link className='nav-main-link' to='/libros'>
           Libros
-        </NavLink>
-        <NavLink class='nav-main-link' to='/categorias'>
+        </Link>
+        <Link className='nav-main-link' to='/categorias'>
           Categorias
-        </NavLink>
-        <NavLink class='nav-main-link' to='/personas'>
+        </Link>
+        <Link className='nav-main-link' to='/personas'>
           Personas
-        </NavLink>
+        </Link>
       </nav>
     </header>
   );

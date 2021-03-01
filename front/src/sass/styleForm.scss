@@ -14,8 +14,16 @@
   font-size: 16px;
   text-align: center;
 }
+select {
+  margin: 6px auto;
+  font-size: 16px;
+  width: 54%;
+  height: 32px;
+  border-radius: 10px;
+  padding: 6px;
+}
 
-button {
+.button-form {
   background-color: #3c3c3e;
   color: #f59679;
   width: 54%;

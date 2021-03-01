@@ -8,9 +8,13 @@
   background-color: #f59679;
   color: #3c3c3e;
   padding: 2px;
-  width: 100%;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 13px;
+  margin: 2px;
+  width: 65px;
+}
+thead {
+  background: #1f1e1e;
 }
 
 .table {
@@ -19,15 +23,22 @@
 }
 
 .table td {
-  width: 15%;
   text-align: center;
 }
 th,
 td {
   font-weight: bold;
+  color: #f59679;
+}
+th {
+  font-size: 24px;
+}
+td {
   font-size: 20px;
 }
 
-.table button {
-  padding: 5%;
+table .buttons {
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
 }

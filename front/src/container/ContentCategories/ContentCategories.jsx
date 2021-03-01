@@ -3,10 +3,10 @@ import CategoriesTable from "../../components/CategoriesTable/CategoriesTable";
 
 const ContentCategories = () => {
   return (
-    <>
+    <div className='book' style={{ display: "flex", flexDirection: "row" }}>
       <CategoriesTable />
       <CategoriesForm />
-    </>
+    </div>
   );
 };
 

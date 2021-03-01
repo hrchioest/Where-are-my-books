@@ -1,18 +1,18 @@
 import React from "react";
 import { DataContext } from "../../context/DataContext";
 import Modal from "../Modal/Modal";
+import "../../sass/styleForm.scss";
 
 const CategoriaForm = () => {
   const {
     categoryEdit: category,
     setCategoryEdit,
     getCategories,
-    postCategory,
+    postCategory
   } = React.useContext(DataContext);
 
   const [showModal, setShowModal] = React.useState(false);
-  const [modalText, setModalText] = React.useState('');
-
+  const [modalText, setModalText] = React.useState("");
 
   const handleData = (e) => {
     let { name, value } = e.target;
@@ -22,48 +22,43 @@ const CategoriaForm = () => {
   };
 
   const handleCreate = async () => {
-    if(category.nombre === ''){
+    if (category.nombre === "") {
       setShowModal(true);
-      setModalText('Es necesario un nombre para la categoría');
+      setModalText("Es necesario un nombre para la categoría");
       return;
     }
 
-    const response  = await postCategory(category);
-    if('error' in response){
+    const response = await postCategory(category);
+    if ("error" in response) {
       setShowModal(true);
       setModalText(response.error);
       return;
     }
 
     getCategories();
-    setCategoryEdit({ nombre: "" }); 
+    setCategoryEdit({ nombre: "" });
   };
 
-  const onShow = ()=>{
+  const onShow = () => {
     setShowModal(!showModal);
-  }
+  };
 
-  return (<>
-    <div>
-      <br />
-      <br />
-      <label htmlFor=''>Nombre</label>
+  return (
+    <div className='newLibro-form'>
+      <h2>Añadir Categoria</h2>
       <input
         type='text'
         value={category.nombre}
         name='nombre'
         onChange={handleData}
+        placeholder='Nombre'
       />
-      <div>
-          <button onClick={handleCreate}>Crear</button>
-      </div>
+      <button className='button-form' onClick={handleCreate}>
+        Crear
+      </button>
+
+      <Modal show={showModal} onShow={onShow} modalText={modalText} />
     </div>
-    <Modal
-        show={showModal}
-        onShow={onShow}
-        modalText={modalText}
-      />
-    </>
   );
 };
 

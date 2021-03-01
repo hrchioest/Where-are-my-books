@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { DataContext } from "../../context/DataContext";
 import Modal from "../Modal/Modal";
+import "../../sass/styleTable.scss";
+import iconTrash from "../../img/trash-alt-solid.svg";
 
 const CategoriesTable = () => {
   const { categories, getCategories, deleteCategory } = React.useContext(
@@ -8,15 +10,15 @@ const CategoriesTable = () => {
   );
 
   const [showModal, setShowModal] = React.useState(false);
-  const [modalText, setModalText] = React.useState('');
+  const [modalText, setModalText] = React.useState("");
 
   useEffect(() => {
     getCategories();
   }, []);
 
-  const handleDataDelete = async ({id}) => {
+  const handleDataDelete = async ({ id }) => {
     const response = await deleteCategory(id);
-    if('error' in response){
+    if ("error" in response) {
       setShowModal(true);
       setModalText(response.error);
       return;
@@ -25,26 +27,29 @@ const CategoriesTable = () => {
     getCategories();
   };
 
-  const onShow = ()=>{
+  const onShow = () => {
     setShowModal(!showModal);
-  }
+  };
 
   return (
-    <div>
-      <table>
+    <div className='main-table'>
+      <table className='table'>
         <thead>
-          <tr>
-            <td>Nombre</td>
-            <td>Acciones</td>
+          <tr className='table-tr'>
+            <th>Nombre</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         {categories.map((category) => (
           <tbody key={category.id}>
-            <tr>
+            <tr className='table-tr'>
               <td>{category.nombre}</td>
               <td>
-                <button onClick={() => handleDataDelete(category)}>
-                  eliminar
+                <button
+                  className='button-icon'
+                  onClick={() => handleDataDelete(category)}
+                >
+                  <img src={iconTrash} alt='trash' />
                 </button>
               </td>
             </tr>
@@ -52,11 +57,7 @@ const CategoriesTable = () => {
         ))}
       </table>
 
-      <Modal
-        show={showModal}
-        onShow={onShow}
-        modalText={modalText}
-      />
+      <Modal show={showModal} onShow={onShow} modalText={modalText} />
     </div>
   );
 };

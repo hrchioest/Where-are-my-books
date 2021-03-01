@@ -3,7 +3,7 @@ import PersonsTable from "../../components/PersonsTable/PersonTable";
 
 const ContentPersons = () => {
   return (
-    <div>
+    <div className='book' style={{ display: "flex", flexDirection: "row" }}>
       <PersonsTable />
       <PersonsForm />
     </div>

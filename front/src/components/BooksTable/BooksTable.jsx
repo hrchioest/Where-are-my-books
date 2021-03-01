@@ -3,6 +3,8 @@ import { DataContext } from "../../context/DataContext";
 import Modal from "../Modal/Modal";
 import LeadBookForm from "../LeadBookForm/LeadBookForm";
 import "../../sass/styleTable.scss";
+import iconPencil from "../../img/pencil-alt-solid.svg";
+import iconTrash from "../../img/trash-alt-solid.svg";
 
 const BooksTable = () => {
   const {
@@ -10,7 +12,9 @@ const BooksTable = () => {
     getBooks,
     deleteBooks,
     getBookId,
-    putReturnBook
+    putReturnBook,
+    getCategories,
+    getPersons
   } = React.useContext(DataContext);
 
   const [leadBook, setLeadBook] = React.useState({});
@@ -21,6 +25,8 @@ const BooksTable = () => {
 
   useEffect(() => {
     getBooks();
+    getCategories();
+    getPersons();
   }, []);
 
   const handleDataDelete = async ({ id }) => {
@@ -75,11 +81,16 @@ const BooksTable = () => {
               <td>{libro.descripcion}</td>
               <td>{libro.categoria?.nombre}</td>
               <td>{libro.persona?.alias}</td>
-              <td>
-                <button onClick={() => handleDataDelete(libro)}>
-                  eliminar
+              <td className='buttons'>
+                <button
+                  class='button-icon'
+                  onClick={() => handleDataDelete(libro)}
+                >
+                  <img src={iconTrash} alt='trash' />
                 </button>
-                <button onClick={() => getBookId(libro.id)}>editar</button>
+                <button class='button-icon' onClick={() => getBookId(libro.id)}>
+                  <img src={iconPencil} alt='pencil' />
+                </button>
                 <button
                   disabled={!!libro.persona_id}
                   onClick={() => handleLeadBook(libro)}
