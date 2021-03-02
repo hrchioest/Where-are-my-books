@@ -28,7 +28,7 @@ const BookForm = () => {
   };
 
   const handleCreate = async () => {
-    const response = await postBook(book);
+    const response = await postBook({ ...book, persona_id: +book.persona_id });
 
     if ("error" in response) {
       setShowModal(true);
@@ -40,8 +40,8 @@ const BookForm = () => {
     setBookEdit({
       nombre: "",
       descripcion: "",
-      categoria_id: "categorias",
-      persona_id: "personas"
+      categoria_id: "",
+      persona_id: ""
     });
   };
   console.log("book", book);
@@ -52,8 +52,8 @@ const BookForm = () => {
     setBookEdit({
       nombre: "",
       descripcion: "",
-      categoria_id: "categorias",
-      persona_id: "personas"
+      categoria_id: "",
+      persona_id: ""
     });
   };
 
@@ -83,8 +83,12 @@ const BookForm = () => {
           placeholder='Descripcion'
         />
 
-        <select name='categoria_id' onChange={handleData}>
-          <option value='categorias'>Categorias</option>
+        <select
+          name='categoria_id'
+          value={book.categoria_id}
+          onChange={handleData}
+        >
+          <option value=''>Categorias</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id} disabled={isEdit}>
               {category.nombre}
@@ -92,8 +96,8 @@ const BookForm = () => {
           ))}
         </select>
 
-        <select name='persona_id' onChange={handleData}>
-          <option value='personas'>Personas</option>
+        <select name='persona_id' value={book.persona_id} onChange={handleData}>
+          <option value=''>Personas</option>
           {persons.map((person) => (
             <option key={person.id} value={person.id} disabled={isEdit}>
               {person.alias}
