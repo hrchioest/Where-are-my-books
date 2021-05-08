@@ -19,9 +19,7 @@ const BookForm = () => {
   const [modalText, setModalText] = React.useState("");
 
   const handleData = (e) => {
-    console.log("targ", e.target);
     let { name, value } = e.target;
-
     setBookEdit((state) => {
       return { ...state, [name]: value };
     });
@@ -66,7 +64,7 @@ const BookForm = () => {
   return (
     <>
       <div className='newLibro-form'>
-        {isEdit ? <h2>Editar libro</h2> : <h2>Añadir libro</h2>}
+        {isEdit ? <h2>Edit book</h2> : <h2>Add book</h2>}
         <input
           disabled={isEdit}
           type='text'
@@ -88,7 +86,7 @@ const BookForm = () => {
           value={book.categoria_id}
           onChange={handleData}
         >
-          <option value=''>Categorias</option>
+          <option value=''>Categories</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id} disabled={isEdit}>
               {category.nombre}
@@ -97,7 +95,7 @@ const BookForm = () => {
         </select>
 
         <select name='persona_id' value={book.persona_id} onChange={handleData}>
-          <option value=''>Personas</option>
+          <option value=''>Persons</option>
           {persons.map((person) => (
             <option key={person.id} value={person.id} disabled={isEdit}>
               {person.alias}
@@ -108,11 +106,11 @@ const BookForm = () => {
         <>
           {isEdit ? (
             <button className='button-form' onClick={handleUpdate}>
-              Editar
+              Edit
             </button>
           ) : (
             <button className='button-form' onClick={handleCreate}>
-              Guardar
+              Save
             </button>
           )}
         </>

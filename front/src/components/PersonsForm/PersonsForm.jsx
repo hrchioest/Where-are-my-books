@@ -62,7 +62,7 @@ const PersonForm = () => {
 
   return (
     <div className='newLibro-form'>
-      {isEdit ? <h2>Editar Persona</h2> : <h2>Añadir Persona</h2>}
+      {isEdit ? <h2>Edit Person</h2> : <h2>Add Persona</h2>}
 
       <input
         type='text'
@@ -99,11 +99,11 @@ const PersonForm = () => {
 
       {isEdit ? (
         <button className='button-form' onClick={() => handleUpData()}>
-          Editar
+          Edit
         </button>
       ) : (
         <button className='button-form' onClick={handleCreate}>
-          Crear
+          To create
         </button>
       )}
 

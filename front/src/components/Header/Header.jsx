@@ -5,19 +5,19 @@ import "./header.scss";
 const Header = () => {
   return (
     <header className='header'>
-      <div className='header-title'>
-        <h1>UTN.BA</h1>
-        <h2>Where are my books?</h2>
+      <div className='header-title' style={{ paddingBottom: "10px" }}>
+        <h1 style={{ margin: "0" }}>Where are my books?</h1>
+        <img src='./image/searching.png' width='70px' />
       </div>
       <nav className='nav-main'>
-        <Link className='nav-main-link' to='/libros'>
-          Libros
+        <Link className='nav-main-link' to='/books'>
+          Books
         </Link>
-        <Link className='nav-main-link' to='/categorias'>
-          Categorias
+        <Link className='nav-main-link' to='/categories'>
+          Categories
         </Link>
-        <Link className='nav-main-link' to='/personas'>
-          Personas
+        <Link className='nav-main-link' to='/persons'>
+          Persons
         </Link>
       </nav>
     </header>

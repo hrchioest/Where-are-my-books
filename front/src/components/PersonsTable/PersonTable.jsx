@@ -39,12 +39,12 @@ const PersonsTable = () => {
       <table className='table'>
         <thead>
           <tr className='table-tr'>
-            <th>Nombre</th>
-            <th>Apellido</th>
+            <th>First name</th>
+            <th>Last name</th>
             <th>Email</th>
             <th>Alias</th>
-            <th>Libros prestados</th>
-            <th>Acciones</th>
+            <th>Borrowed books</th>
+            <th>Actions</th>
           </tr>
         </thead>
         {persons.map((persona) => (

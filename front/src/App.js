@@ -16,13 +16,13 @@ function App() {
           <Route exact path='/'>
             <ContentBooks />
           </Route>
-          <Route exact path='/personas'>
+          <Route exact path='/persons'>
             <ContentPersons />
           </Route>
-          <Route exact path='/libros'>
+          <Route exact path='/books'>
             <ContentBooks />
           </Route>
-          <Route exact path='/categorias'>
+          <Route exact path='/categories'>
             <ContentCategories />
           </Route>
         </Switch>

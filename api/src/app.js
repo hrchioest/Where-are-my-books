@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 
-const libroRouter = require("./routes/libro/libro.route");
-const personaRouter = require("./routes/persona/persona.route");
-const categoriaRouter = require("./routes/categoria/categoria.route");
+const booksRouter = require("./routes/books/books.route");
+const personsRouter = require("./routes/persons/persons.route");
+const categoriesRouter = require("./routes/categories/categories.route");
 
 //Setting
 const app = express();
@@ -16,9 +16,9 @@ app.use(express.json());
 app.use(cors());
 
 // rutas
-app.use("/libro", libroRouter);
-app.use("/persona", personaRouter);
-app.use("/categoria", categoriaRouter);
+app.use("/books", booksRouter);
+app.use("/persons", personsRouter);
+app.use("/categories", categoriesRouter);
 
 // Starting the server
 app.listen(port, () => {

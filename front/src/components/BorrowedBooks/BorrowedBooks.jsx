@@ -21,7 +21,7 @@ const BorrowedBooks = ({ persona_id }) => {
           })}
         </ul>
       ) : (
-        <div>No tiene</div>
+        <div>None</div>
       )}
     </>
   );

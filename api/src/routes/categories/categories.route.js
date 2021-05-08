@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const query = require("./categoria.query");
+const query = require("./categories.query");
 
 /*
 POST '/categoria' recibe: {nombre: string} retorna: status: 200, {id: numerico, nombre: string} 

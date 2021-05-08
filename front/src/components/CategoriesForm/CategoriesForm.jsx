@@ -45,7 +45,7 @@ const CategoriaForm = () => {
 
   return (
     <div className='newLibro-form'>
-      <h2>Añadir Categoria</h2>
+      <h2>Add Categoria</h2>
       <input
         type='text'
         value={category.nombre}
@@ -54,7 +54,7 @@ const CategoriaForm = () => {
         placeholder='Nombre'
       />
       <button className='button-form' onClick={handleCreate}>
-        Crear
+        Create
       </button>
 
       <Modal show={showModal} onShow={onShow} modalText={modalText} />

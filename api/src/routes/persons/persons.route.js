@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const query = require("./persona.query");
+const query = require("./persons.query");
 /*
 POST '/persona' recibe: {nombre: string, apellido: string, alias: string, email: string} 
 retorna: status: 200, {id: numérico, nombre: string, apellido: string, alias: string, email: string}
@@ -69,7 +69,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/:id/libros", async (req, res) => {
+router.get("/:id/books", async (req, res) => {
   const id = req.params.id;
   try {
     const libros = await query.traerLibrosPorPersona(id);

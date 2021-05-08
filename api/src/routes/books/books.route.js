@@ -1,22 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
-const query = require("./libro.query");
-const queryCategoria = require("../categoria/categoria.query");
-const queryPersona = require("../persona/persona.query");
+const query = require("./books.query");
+const queryCategoria = require("../categories/categories.query");
+const queryPersona = require("../persons/persons.query");
 
 /*
 GET '/libro' - Devuelve todos los libros o mensaje de error con status 413.
 */
 router.get("/", async (req, res) => {
   try {
-    const respuesta = await query.traerLibros({...req.query});
+    const respuesta = await query.traerLibros({ ...req.query });
     res.send(respuesta);
   } catch (e) {
     res.status(413).send({ error: "Error inesperado" });
   }
 });
-
 
 /*
 GET '/libro/categories' - Devuelve todos los libros o mensaje de error con status 413.
@@ -29,7 +28,6 @@ router.get("/", async (req, res) => {
     res.status(413).send({ error: "Error inesperado" });
   }
 });
-
 
 /*
 POST '/libro' recibe: {nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}
@@ -110,16 +108,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// router.get("/:id", async (req, res) =>{
-//   const id= req.params.id;
-//   try{
-//     const persona = await query.traerPersonaPorLibro(id);
-//     res.send(persona)
-//   }catch (e) {
-//     console.error(e.message);
-//     res.status(413).send({ error: e.message });
-//   }
-// }
 /* 
 PUT '/libro/:id' y {id: numero, nombre:string, descripcion:string, categoria_id:numero,
 persona_id:numero/null} devuelve status 200 y {id: numero, nombre:string, descripcion:string,
@@ -188,7 +176,7 @@ o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "el li
 no se puede prestar hasta que no se devuelva", "no se encontro el libro", "no se encontro la persona a la que 
 se quiere prestar el libro"
 */
-router.put("/prestar/:id", async (req, res) => {
+router.put("/lend/:id", async (req, res) => {
   const id = req.params.id;
   const persona_id = req.body.persona_id;
 
@@ -223,7 +211,7 @@ PUT '/libro/devolver/:id' y {} devuelve 200 y {mensaje: "se realizo la devolucio
 o bien status 413, {mensaje: <descripcion del error>} "error inesperado", "ese libro no estaba 
 prestado!", "ese libro no existe"
 */
-router.put("/devolver/:id", async (req, res) => {
+router.put("/return/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
